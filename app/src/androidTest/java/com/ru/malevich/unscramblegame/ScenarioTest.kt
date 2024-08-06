@@ -14,7 +14,7 @@ class ScenarioTest {
     private lateinit var gamePage: GamePage
     @Before
     fun setup(){
-        gamePage = GamePage(scrambledWord = "emag", unscrambledWord = "game")
+        gamePage = GamePage(scrambledWord = "auto".reversed())
     }
     @get:Rule
     val scenarioRule = ActivityScenarioRule(MainActivity::class.java)
@@ -26,23 +26,23 @@ class ScenarioTest {
     fun caseNumber1() {
         gamePage.assertInitialState()
 
-        gamePage.type("ga")
+        gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
 
-        gamePage.erase(2)
+        gamePage.input(text = "")
         gamePage.assertInitialState()
 
-        gamePage.type("ga")
+        gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
 
-        gamePage.type("me")
+        gamePage.input(text = "auto")
         gamePage.assertSufficientInputState()
 
         gamePage.clickCheck()
         gamePage.assertRightAnsweredState()
 
         gamePage.clickNext()
-        gamePage = GamePage(scrambledWord = "drow", unscrambledWord = "word")
+        gamePage = GamePage(scrambledWord = "animal".reversed())
         gamePage.assertInitialState()
     }
 
@@ -53,26 +53,26 @@ class ScenarioTest {
     fun caseNumber2(){
         gamePage.assertInitialState()
 
-        gamePage.type("ga")
+        gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
 
-        gamePage.erase("ga")
+        gamePage.input(text = "auau")
         gamePage.assertSufficientInputState()
 
         gamePage.clickCheck()
         gamePage.assertWrongAnsweredState()
 
-        gamePage.erase(2)
+        gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
 
-        gamePage.type("me")
+        gamePage.input(text = "auto")
         gamePage.assertSufficientInputState()
 
         gamePage.clickCheck()
         gamePage.assertRightAnsweredState()
 
         gamePage.clickNext()
-        gamePage = GamePage(scrambledWord = "drow", unscrambledWord = "word")
+        gamePage = GamePage(scrambledWord = "animal".reversed())
         gamePage.assertInitialState()
     }
 
@@ -82,14 +82,14 @@ class ScenarioTest {
     fun caseNumber3(){
         gamePage.assertInitialState()
 
-        gamePage.type("ga")
+        gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
 
-        gamePage.type("me")
+        gamePage.input(text = "auto")
         gamePage.assertSufficientInputState()
 
         gamePage.clickSkip()
-        gamePage = GamePage(scrambledWord = "drow", unscrambledWord = "word")
+        gamePage = GamePage(scrambledWord = "animal".reversed())
         gamePage.assertInitialState()
     }
 
@@ -99,17 +99,17 @@ class ScenarioTest {
     fun caseNumber4(){
         gamePage.assertInitialState()
 
-        gamePage.type("ga")
+        gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
 
-        gamePage.erase("ga")
+        gamePage.input(text = "auau")
         gamePage.assertSufficientInputState()
 
         gamePage.clickCheck()
         gamePage.assertWrongAnsweredState()
 
         gamePage.clickSkip()
-        gamePage = GamePage(scrambledWord = "drow", unscrambledWord = "word")
+        gamePage = GamePage(scrambledWord = "animal".reversed())
         gamePage.assertInitialState()
     }
 }
