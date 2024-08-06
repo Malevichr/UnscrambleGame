@@ -29,13 +29,13 @@ class ScenarioTest {
         gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
 
-        gamePage.input(text = "")
+        gamePage.remove(count = 2)
         gamePage.assertInitialState()
 
         gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
 
-        gamePage.input(text = "auto")
+        gamePage.input(text = "to")
         gamePage.assertSufficientInputState()
 
         gamePage.clickCheck()
@@ -56,16 +56,16 @@ class ScenarioTest {
         gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
 
-        gamePage.input(text = "auau")
+        gamePage.input(text = "au")
         gamePage.assertSufficientInputState()
 
         gamePage.clickCheck()
         gamePage.assertWrongAnsweredState()
 
-        gamePage.input(text = "au")
+        gamePage.remove(count = 2)
         gamePage.assertInsufficientInputState()
 
-        gamePage.input(text = "auto")
+        gamePage.input(text = "to")
         gamePage.assertSufficientInputState()
 
         gamePage.clickCheck()
@@ -85,7 +85,7 @@ class ScenarioTest {
         gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
 
-        gamePage.input(text = "auto")
+        gamePage.input(text = "to")
         gamePage.assertSufficientInputState()
 
         gamePage.clickSkip()
@@ -102,7 +102,7 @@ class ScenarioTest {
         gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
 
-        gamePage.input(text = "auau")
+        gamePage.input(text = "au")
         gamePage.assertSufficientInputState()
 
         gamePage.clickCheck()
