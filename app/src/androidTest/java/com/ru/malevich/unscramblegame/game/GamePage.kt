@@ -5,6 +5,7 @@ import android.widget.LinearLayout
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withParent
+import com.ru.malevich.unscramblegame.R
 import org.hamcrest.Matcher
 
 class GamePage(scrambledWord: String) {
@@ -13,26 +14,32 @@ class GamePage(scrambledWord: String) {
         withParent(isAssignableFrom(LinearLayout::class.java))
 
     private val scrambledWordUi = ScrambledWordUi(
+        id = R.id.scrambledWordTextView,
         text = scrambledWord,
         containerIdMatcher = containerIdMatcher,
-        containerclassIdMatcher = containerClassIdMatcher
+        containerClassIdMatcher = containerClassIdMatcher
     )
-    private val inputTextUi = InoutTextUi(
+    private val inputTextUi = InputTextUi(
         containerIdMatcher = containerIdMatcher,
-        containerclassIdMatcher = containerClassIdMatcher
+        containerClassIdMatcher = containerClassIdMatcher
     )
     private val checkUi = CheckButtonUi(
         id = R.id.checkButton,
+        text = R.string.checd,
         containerIdMatcher = containerIdMatcher,
-        containerclassIdMatcher = containerClassIdMatcher
+        containerClassIdMatcher = containerClassIdMatcher
     )
     private val skipButtonUi = ButtonUi(
         id = R.id.skipButton,
-        text = R.string.skip
+        textResId = R.string.skip,
+        containerIdMatcher = containerIdMatcher,
+        containerClassIdMatcher = containerClassIdMatcher
     )
     private val nextButtonUi = ButtonUi(
         id = R.id.nextButton,
-        text = R.string.next
+        textResId = R.string.next,
+        containerIdMatcher = containerIdMatcher,
+        containerClassIdMatcher = containerClassIdMatcher
     )
 
     fun assertInitialState() {
