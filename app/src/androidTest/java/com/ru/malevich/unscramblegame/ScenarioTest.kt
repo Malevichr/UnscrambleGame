@@ -2,7 +2,7 @@ package com.ru.malevich.unscramblegame
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.Assert.*
+import com.ru.malevich.unscramblegame.game.GamePage
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
