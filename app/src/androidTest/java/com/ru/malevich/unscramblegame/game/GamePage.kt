@@ -25,7 +25,7 @@ class GamePage(scrambledWord: String) {
     )
     private val checkUi = CheckButtonUi(
         id = R.id.checkButton,
-        text = R.string.checd,
+        text = R.string.check,
         containerIdMatcher = containerIdMatcher,
         containerClassIdMatcher = containerClassIdMatcher
     )
