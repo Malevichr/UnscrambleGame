@@ -1,6 +1,3 @@
 <resources>
     <string name="app_name">Unscramble Game</string>
-    <string name="check">check</string>
-    <string name="skip">skip</string>
-    <string name="next">next</string>
 </resources>
