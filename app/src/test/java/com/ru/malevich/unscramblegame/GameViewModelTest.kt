@@ -191,19 +191,14 @@ class GameViewModelTest {
 }
 
 private class FakeRepository : GameRepository {
-    private val list: List<Any> = listOf(
-        UnscrambleTask(
-            scrambledWord = "auto".reversed(),
-            unscrambleWord = "auto"
-        ),
-        UnscrambleTask(
-            scrambledWord = "animal".reversed(),
-            unscrambleWord = "animal"
-        ),
+    private val list: List<String> = listOf(
+        "auto",
+        "animal"
     )
     private var listIndex = 0
-    override fun unscrambleTask(): UnscrumbleTask {
-        return list[listIndex]
+    override fun unscrambleTask(): UnscrambleTask {
+        val word: String = list[listIndex]
+        return UnscrambleTask(word, word.reversed())
     }
 
     override fun next() {
