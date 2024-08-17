@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             uiState.update(binding = binding)
         }
         binding.checkButton.setOnClickListener {
-            val uiState: GameUiState = viewModel.next(text = binding.inputText.text.toString())
+            val uiState: GameUiState = viewModel.check(text = binding.inputText.text.toString())
             uiState.update(binding = binding)
         }
         binding.skipButton.setOnClickListener {
