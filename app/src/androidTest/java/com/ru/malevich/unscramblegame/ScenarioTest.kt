@@ -79,6 +79,7 @@ class ScenarioTest {
     /**
      * UGTC-03
      */
+    @Test
     fun caseNumber3(){
         gamePage.assertInitialState()
 
@@ -96,6 +97,7 @@ class ScenarioTest {
     /**
      * UGTC-04
      */
+    @Test
     fun caseNumber4(){
         gamePage.assertInitialState()
 

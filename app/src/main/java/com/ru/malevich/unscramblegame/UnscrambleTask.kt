@@ -5,5 +5,5 @@ data class UnscrambleTask(
     val scrambledWord: String
 ) {
     fun checkUserAnswer(userAnswer: String): Boolean =
-        userAnswer.equals(userAnswer, true)
+        userAnswer.equals(unscrambledWord, true)
 }

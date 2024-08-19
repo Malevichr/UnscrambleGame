@@ -114,6 +114,9 @@ class GameViewModelTest {
         actual = viewModel.next()
         expected = GameUiState.Initial(scrambledWord = "animal".reversed())
         assertEquals(expected, actual)
+        actual = viewModel.next()
+        expected = GameUiState.Initial(scrambledWord = "car".reversed())
+        assertEquals(expected, actual)
     }
 
     /**
@@ -189,7 +192,8 @@ class GameViewModelTest {
 private class FakeRepository : GameRepository {
     private val list: List<String> = listOf(
         "auto",
-        "animal"
+        "animal",
+        "car"
     )
     private var listIndex = 0
     override fun unscrambleTask(): UnscrambleTask {
