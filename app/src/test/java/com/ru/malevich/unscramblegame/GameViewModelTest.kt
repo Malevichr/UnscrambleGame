@@ -1,6 +1,6 @@
 package com.ru.malevich.unscramblegame
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -28,7 +28,7 @@ class GameViewModelTest {
 
         actual = viewModel.handleUserInput("au")
         expected =
-            GameUiState.assertInsufficientInput(
+            GameUiState.InsufficientInput(
                 scrambledWord = "auto".reversed()
             )
         assertEquals(expected, actual)
@@ -53,13 +53,12 @@ class GameViewModelTest {
 
         actual = viewModel.check("auto")
         expected = GameUiState.RightAnswered(
-            scrambledWord = "auto".reversed(),
-            checkButtonState = ButtonUiState.RightAnsweredState()
+            scrambledWord = "auto".reversed()
         )
         assertEquals(expected, actual)
 
         actual = viewModel.next()
-        expected = GameUiState.InitialState(scrambledWord = "animal".reversed())
+        expected = GameUiState.Initial(scrambledWord = "animal".reversed())
         assertEquals(expected, actual)
     }
 
@@ -74,29 +73,28 @@ class GameViewModelTest {
 
         actual = viewModel.handleUserInput("au")
         expected =
-            GameUiState.assertInsufficientInput(
+            GameUiState.InsufficientInput(
                 scrambledWord = "auto".reversed()
             )
         assertEquals(expected, actual)
 
         actual = viewModel.handleUserInput("auau")
         expected =
-            GameUiState.assertSufficientInput(
+            GameUiState.SufficientInput(
                 scrambledWord = "auto".reversed()
             )
         assertEquals(expected, actual)
 
         actual = viewModel.check("auau")
-        expected = GameUiState.RightAnswered(
-            scrambledWord = "auto".reversed(),
-            checkButtonState = ButtonUiState.WrongAnsweredState()
+        expected = GameUiState.WrongAnswered(
+            scrambledWord = "auto".reversed()
         )
         assertEquals(expected, actual)
 
         actual = viewModel.handleUserInput("au")
         expected =
-            GameUiState.assertInsufficientInput(
-                scrambledWord = "au".reversed()
+            GameUiState.InsufficientInput(
+                scrambledWord = "auto".reversed()
             )
         assertEquals(expected, actual)
 
@@ -109,13 +107,15 @@ class GameViewModelTest {
 
         actual = viewModel.check("auto")
         expected = GameUiState.RightAnswered(
-            scrambledWord = "auto".reversed(),
-            checkButtonState = ButtonUiState.RightAnsweredState()
+            scrambledWord = "auto".reversed()
         )
         assertEquals(expected, actual)
 
         actual = viewModel.next()
-        expected = GameUiState.InitialState(scrambledWord = "animal".reversed())
+        expected = GameUiState.Initial(scrambledWord = "animal".reversed())
+        assertEquals(expected, actual)
+        actual = viewModel.next()
+        expected = GameUiState.Initial(scrambledWord = "car".reversed())
         assertEquals(expected, actual)
     }
 
@@ -130,13 +130,13 @@ class GameViewModelTest {
 
         actual = viewModel.handleUserInput("au")
         expected =
-            GameUiState.assertInsufficientInput(
+            GameUiState.InsufficientInput(
                 scrambledWord = "auto".reversed()
             )
         assertEquals(expected, actual)
 
         actual = viewModel.next()
-        expected = GameUiState.InitialState(scrambledWord = "animal".reversed())
+        expected = GameUiState.Initial(scrambledWord = "animal".reversed())
         assertEquals(expected, actual)
     }
 
@@ -151,41 +151,40 @@ class GameViewModelTest {
 
         actual = viewModel.handleUserInput("au")
         expected =
-            GameUiState.assertInsufficientInput(
+            GameUiState.InsufficientInput(
                 scrambledWord = "auto".reversed()
             )
         assertEquals(expected, actual)
 
         actual = viewModel.handleUserInput("auau")
         expected =
-            GameUiState.assertSufficientInput(
+            GameUiState.SufficientInput(
                 scrambledWord = "auto".reversed()
             )
         assertEquals(expected, actual)
 
         actual = viewModel.handleUserInput("auauu")
         expected =
-            GameUiState.assertInsufficientInput(
+            GameUiState.InsufficientInput(
                 scrambledWord = "auto".reversed()
             )
         assertEquals(expected, actual)
 
         actual = viewModel.handleUserInput("auau")
         expected =
-            GameUiState.assertSufficientInput(
+            GameUiState.SufficientInput(
                 scrambledWord = "auto".reversed()
             )
         assertEquals(expected, actual)
 
         actual = viewModel.check("auau")
         expected = GameUiState.WrongAnswered(
-            scrambledWord = "auto".reversed(),
-            checkButtonState = ButtonUiState.WrongAnsweredState()
+            scrambledWord = "auto".reversed()
         )
         assertEquals(expected, actual)
 
         actual = viewModel.next()
-        expected = GameUiState.InitialState(scrambledWord = "animal".reversed())
+        expected = GameUiState.Initial(scrambledWord = "animal".reversed())
         assertEquals(expected, actual)
     }
 }
@@ -193,12 +192,13 @@ class GameViewModelTest {
 private class FakeRepository : GameRepository {
     private val list: List<String> = listOf(
         "auto",
-        "animal"
+        "animal",
+        "car"
     )
     private var listIndex = 0
     override fun unscrambleTask(): UnscrambleTask {
         val word: String = list[listIndex]
-        return UnscrambleTask(word, word.reversed())
+        return UnscrambleTask(unscrambledWord = word, scrambledWord = word.reversed())
     }
 
     override fun next() {

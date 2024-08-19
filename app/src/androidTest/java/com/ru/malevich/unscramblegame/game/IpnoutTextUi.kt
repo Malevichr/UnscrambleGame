@@ -14,7 +14,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.isNotEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -39,27 +38,24 @@ class InputTextUi(
         allOf(
             isAssignableFrom(TextInputEditText::class.java),
             isDisplayed(),
-            withId(R.id.inputText),
-            withParent(
-                allOf(
-                    isAssignableFrom(TextInputEditText::class.java),
-                    withId(inputLayoutId)
-                )
-            )
+            withId(R.id.inputText)
         )
     )
 
     fun assertInitialState() {
-        inputLayoutInteraction.check(matches(isEnabled()))
+        inputLayoutInteraction.check(matches(isDisplayed()))
+        inputInteraction.check(matches(isEnabled()))
         inputInteraction.check(matches(withText("")))
     }
 
     fun input(text: String) {
+        inputLayoutInteraction.check(matches(isDisplayed()))
         inputInteraction.perform(typeText(text), closeSoftKeyboard())
     }
 
     fun assertInsufficientInputState() {
-        inputLayoutInteraction.check(matches(isEnabled()))
+        inputLayoutInteraction.check(matches(isDisplayed()))
+        inputInteraction.check(matches(isEnabled()))
     }
 
     fun remove(count: Int) {
@@ -72,11 +68,13 @@ class InputTextUi(
     }
 
     fun assertSufficientInputState() {
-        inputLayoutInteraction.check(matches(isEnabled()))
+        inputLayoutInteraction.check(matches(isDisplayed()))
+        inputInteraction.check(matches(isEnabled()))
     }
 
     fun assertNotAvailableToInput() {
-        inputLayoutInteraction.check(matches(isNotEnabled()))
+        inputLayoutInteraction.check(matches(isDisplayed()))
+        inputInteraction.check(matches(isNotEnabled()))
     }
 
 }

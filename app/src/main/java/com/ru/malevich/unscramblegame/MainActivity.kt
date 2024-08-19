@@ -21,20 +21,23 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val viewModel = GameViewModel()
+        val viewModel = GameViewModel(GameRepository.Base())
 
         binding.nextButton.setOnClickListener {
             val uiState: GameUiState = viewModel.next()
             uiState.update(binding = binding)
         }
+
         binding.checkButton.setOnClickListener {
             val uiState: GameUiState = viewModel.check(text = binding.inputText.text.toString())
             uiState.update(binding = binding)
         }
+
         binding.skipButton.setOnClickListener {
             val uiState: GameUiState = viewModel.next()
             uiState.update(binding = binding)
         }
+
         binding.inputText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
