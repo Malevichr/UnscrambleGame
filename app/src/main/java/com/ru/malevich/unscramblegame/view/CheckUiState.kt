@@ -1,4 +1,4 @@
-package com.ru.malevich.unscramblegame
+package com.ru.malevich.unscramblegame.view
 
 import android.graphics.Color
 import com.ru.malevich.unscramblegame.databinding.ActivityMainBinding

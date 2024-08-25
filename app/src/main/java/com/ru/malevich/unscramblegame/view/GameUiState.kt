@@ -1,4 +1,4 @@
-package com.ru.malevich.unscramblegame
+package com.ru.malevich.unscramblegame.view
 
 import android.view.View
 import com.ru.malevich.unscramblegame.databinding.ActivityMainBinding
@@ -9,8 +9,8 @@ interface GameUiState : UiState {
         private val inputUiState: InputUiState,
         private val checkUiState: CheckUiState,
         private val skipVisibility: Int,
-        private val nextVisibility: Int
-
+        private val nextVisibility: Int,
+        private val userInput: String = ""
     ) : GameUiState {
         override fun update(binding: ActivityMainBinding) = with(binding) {
             scrambledWordTextView.text = text
@@ -18,36 +18,38 @@ interface GameUiState : UiState {
             checkUiState.update(binding)
             skipButton.visibility = skipVisibility
             nextButton.visibility = nextVisibility
+            if (userInput != "")
+                inputText.setText(userInput)
         }
     }
 
-    data class Initial(val scrambledWord: String) : Abstract(
+    data class Initial(val scrambledWord: String, private val userInput: String = "") : Abstract(
         text = scrambledWord,
         skipVisibility = View.VISIBLE,
         nextVisibility = View.GONE,
         inputUiState = InputUiState.Initial(),
-        checkUiState = CheckUiState.Disabled()
-    ) {
-        override fun update(binding: ActivityMainBinding) {
-            super.update(binding)
-
-        }
-    }
-
-    data class InsufficientInput(val scrambledWord: String) : Abstract(
-        text = scrambledWord,
-        skipVisibility = View.VISIBLE,
-        nextVisibility = View.GONE,
-        inputUiState = InputUiState.Base(),
-        checkUiState = CheckUiState.Disabled()
+        checkUiState = CheckUiState.Disabled(),
+        userInput = userInput
     )
 
-    data class SufficientInput(val scrambledWord: String) : Abstract(
+    data class InsufficientInput(val scrambledWord: String, private val userInput: String = "") :
+        Abstract(
         text = scrambledWord,
         skipVisibility = View.VISIBLE,
         nextVisibility = View.GONE,
         inputUiState = InputUiState.Base(),
-        checkUiState = CheckUiState.Enabled()
+            checkUiState = CheckUiState.Disabled(),
+            userInput = userInput
+    )
+
+    data class SufficientInput(val scrambledWord: String, private val userInput: String = "") :
+        Abstract(
+        text = scrambledWord,
+        skipVisibility = View.VISIBLE,
+        nextVisibility = View.GONE,
+        inputUiState = InputUiState.Base(),
+            checkUiState = CheckUiState.Enabled(),
+            userInput = userInput
     )
 
     data class RightAnswered(val scrambledWord: String) : Abstract(

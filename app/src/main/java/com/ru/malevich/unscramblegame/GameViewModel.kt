@@ -1,6 +1,9 @@
 package com.ru.malevich.unscramblegame
 
-class GameViewModel(private val repository: GameRepository) {
+import com.ru.malevich.unscramblegame.data.GameRepository
+import com.ru.malevich.unscramblegame.view.GameUiState
+
+class GameViewModel(val repository: GameRepository) {
     fun next(): GameUiState {
         repository.next()
         return init()
@@ -16,6 +19,7 @@ class GameViewModel(private val repository: GameRepository) {
 
     fun handleUserInput(text: String): GameUiState {
         val scrambledWord = repository.unscrambleTask().scrambledWord
+        repository.saveUserInput(text)
         return when (text.length) {
             0 -> GameUiState.Initial(scrambledWord)
             scrambledWord.length -> GameUiState.SufficientInput(scrambledWord)
@@ -25,9 +29,14 @@ class GameViewModel(private val repository: GameRepository) {
 
     fun init(): GameUiState {
         val data = repository.unscrambleTask()
-        return GameUiState.Initial(
-            data.scrambledWord
-        )
+        val savedInput = repository.userInput()
+        return if (savedInput == "")
+            GameUiState.Initial(data.scrambledWord)
+        else if (data.unscrambledWord.length == savedInput.length)
+            GameUiState.SufficientInput(data.scrambledWord, savedInput)
+        else
+            GameUiState.InsufficientInput(data.scrambledWord, savedInput)
+
     }
 
 }

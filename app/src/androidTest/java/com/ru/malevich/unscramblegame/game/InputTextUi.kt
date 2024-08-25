@@ -14,6 +14,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.isNotEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -38,7 +39,15 @@ class InputTextUi(
         allOf(
             isAssignableFrom(TextInputEditText::class.java),
             isDisplayed(),
-            withId(R.id.inputText)
+            withId(R.id.inputText),
+            withParent(
+                withParent(
+                    allOf(
+                        withId(inputLayoutId),
+                        isAssignableFrom(TextInputLayout::class.java)
+                    )
+                )
+            )
         )
     )
 

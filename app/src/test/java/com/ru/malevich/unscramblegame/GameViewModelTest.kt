@@ -1,5 +1,8 @@
 package com.ru.malevich.unscramblegame
 
+import com.ru.malevich.unscramblegame.data.GameRepository
+import com.ru.malevich.unscramblegame.data.UnscrambleTask
+import com.ru.malevich.unscramblegame.view.GameUiState
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -200,6 +203,10 @@ private class FakeRepository : GameRepository {
         val word: String = list[listIndex]
         return UnscrambleTask(unscrambledWord = word, scrambledWord = word.reversed())
     }
+
+    override fun saveUserInput(input: String) = Unit
+
+    override fun userInput() = ""
 
     override fun next() {
         listIndex++
