@@ -22,21 +22,14 @@ class GameViewModel(val repository: GameRepository) {
         repository.saveUserInput(text)
         return when (text.length) {
             0 -> GameUiState.Initial(scrambledWord)
-            scrambledWord.length -> GameUiState.SufficientInput(scrambledWord)
-            else -> GameUiState.InsufficientInput(scrambledWord)
+            scrambledWord.length -> GameUiState.SufficientInput(scrambledWord, text)
+            else -> GameUiState.InsufficientInput(scrambledWord, text)
         }
     }
 
     fun init(): GameUiState {
-        val data = repository.unscrambleTask()
         val savedInput = repository.userInput()
-        return if (savedInput == "")
-            GameUiState.Initial(data.scrambledWord)
-        else if (data.unscrambledWord.length == savedInput.length)
-            GameUiState.SufficientInput(data.scrambledWord, savedInput)
-        else
-            GameUiState.InsufficientInput(data.scrambledWord, savedInput)
-
+        return handleUserInput(savedInput)
     }
 
 }

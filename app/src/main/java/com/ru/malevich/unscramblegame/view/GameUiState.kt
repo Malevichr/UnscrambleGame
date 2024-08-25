@@ -18,7 +18,7 @@ interface GameUiState : UiState {
             checkUiState.update(binding)
             skipButton.visibility = skipVisibility
             nextButton.visibility = nextVisibility
-            if (userInput != "")
+            if (userInput != inputText.text.toString())
                 inputText.setText(userInput)
         }
     }
