@@ -15,7 +15,7 @@ interface StringCache {
         }
 
         override fun read(): String {
-            return sharedPreferences.getString(key, defaultValue)!!
+            return sharedPreferences.getString(key, defaultValue) ?: defaultValue
         }
     }
 }
