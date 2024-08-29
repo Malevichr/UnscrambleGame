@@ -5,9 +5,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MainActivity">
+    tools:context=".views.MainActivity">
 
-    <TextView
+    <com.ru.malevich.unscramblegame.views.scrambledwordtextview.ScrambledTextView
         android:id="@+id/scrambledWordTextView"
         style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="match_parent"
@@ -20,12 +20,14 @@
         android:id="@+id/inputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp">
+        android:layout_marginHorizontal="8dp"
+        android:enabled="true">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.ru.malevich.unscramblegame.views.unscrambledwordedittext.UnscrambledWordEditText
             android:id="@+id/inputText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="true"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -34,7 +36,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.5" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.ru.malevich.unscramblegame.views.checkbutton.CheckButton
         android:id="@+id/checkButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,7 +45,7 @@
         android:padding="24dp"
         android:text="@string/check" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.ru.malevich.quizgame.views.visibilitybutton.VisibilityButton
         android:id="@+id/skipButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,7 +54,7 @@
         android:padding="24dp"
         android:text="@string/skip" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.ru.malevich.quizgame.views.visibilitybutton.VisibilityButton
         android:id="@+id/nextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

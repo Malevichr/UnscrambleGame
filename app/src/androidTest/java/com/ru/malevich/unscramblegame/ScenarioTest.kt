@@ -4,7 +4,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.ru.malevich.unscramblegame.game.GamePage
-import com.ru.malevich.unscramblegame.view.MainActivity
+import com.ru.malevich.unscramblegame.views.MainActivity
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -21,7 +21,7 @@ class ScenarioTest {
         gamePage = GamePage(scrambledWord = "auto".reversed())
         application =
             InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as FakeApp
-
+        application.resetViewModel()
     }
 
     @After
@@ -49,9 +49,9 @@ class ScenarioTest {
 
 
         gamePage.remove(count = 2)
-        gamePage.assertInitialState()
+        gamePage.assertInsufficientInputState()
         scenarioRule.scenario.recreate()
-        gamePage.assertInitialState()
+        gamePage.assertInsufficientInputState()
 
         gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
