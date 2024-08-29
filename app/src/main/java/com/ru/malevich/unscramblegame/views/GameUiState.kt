@@ -1,0 +1,114 @@
+package com.ru.malevich.unscramblegame.views
+
+import com.ru.malevich.quizgame.views.visibilitybutton.UpdateVisibility
+import com.ru.malevich.quizgame.views.visibilitybutton.VisibilityUiState
+import com.ru.malevich.unscramblegame.views.checkbutton.CheckUiState
+import com.ru.malevich.unscramblegame.views.checkbutton.UpdateCheckButton
+import com.ru.malevich.unscramblegame.views.scrambledwordtextview.UpdateText
+import com.ru.malevich.unscramblegame.views.unscrambledwordedittext.InputUiState
+import com.ru.malevich.unscramblegame.views.unscrambledwordedittext.UpdateUnscrambledEditText
+
+interface GameUiState {
+    fun update(
+        scrambledTextView: UpdateText,
+        unscrambledEditText: UpdateUnscrambledEditText,
+        checkButton: UpdateCheckButton,
+        nextButton: UpdateVisibility,
+        skipButton: UpdateVisibility
+    )
+
+
+    data class Initial(private val scrambledWord: String) : GameUiState {
+        override fun update(
+            scrambledTextView: UpdateText,
+            unscrambledEditText: UpdateUnscrambledEditText,
+            checkButton: UpdateCheckButton,
+            nextButton: UpdateVisibility,
+            skipButton: UpdateVisibility
+        ) {
+            scrambledTextView.update(scrambledWord)
+            unscrambledEditText.update(InputUiState.Initial)
+            checkButton.update(CheckUiState.Disabled)
+            nextButton.update(VisibilityUiState.Gone)
+            skipButton.update(VisibilityUiState.Visible)
+        }
+
+    }
+
+    data class InsufficientInput(private val userInput: String = "") : GameUiState {
+        override fun update(
+            scrambledTextView: UpdateText,
+            unscrambledEditText: UpdateUnscrambledEditText,
+            checkButton: UpdateCheckButton,
+            nextButton: UpdateVisibility,
+            skipButton: UpdateVisibility
+        ) {
+            unscrambledEditText.update(InputUiState.Base)
+            unscrambledEditText.update(userInput)
+            checkButton.update(CheckUiState.Disabled)
+            nextButton.update(VisibilityUiState.Gone)
+        }
+
+    }
+
+    data class SufficientInput(private val userInput: String = "") :
+        GameUiState {
+        override fun update(
+            scrambledTextView: UpdateText,
+            unscrambledEditText: UpdateUnscrambledEditText,
+            checkButton: UpdateCheckButton,
+            nextButton: UpdateVisibility,
+            skipButton: UpdateVisibility
+        ) {
+            unscrambledEditText.update(InputUiState.Base)
+            unscrambledEditText.update(userInput)
+            checkButton.update(CheckUiState.Enabled)
+            nextButton.update(VisibilityUiState.Gone)
+        }
+
+    }
+
+    object RightAnswered
+        : GameUiState {
+        override fun update(
+            scrambledTextView: UpdateText,
+            unscrambledEditText: UpdateUnscrambledEditText,
+            checkButton: UpdateCheckButton,
+            nextButton: UpdateVisibility,
+            skipButton: UpdateVisibility
+        ) {
+            unscrambledEditText.update(InputUiState.RightAnswered)
+            checkButton.update(CheckUiState.RightAnswered)
+            nextButton.update(VisibilityUiState.Visible)
+            skipButton.update(VisibilityUiState.Gone)
+        }
+
+    }
+
+    object WrongAnswered
+        : GameUiState {
+        override fun update(
+            scrambledTextView: UpdateText,
+            unscrambledEditText: UpdateUnscrambledEditText,
+            checkButton: UpdateCheckButton,
+            nextButton: UpdateVisibility,
+            skipButton: UpdateVisibility
+        ) {
+            unscrambledEditText.update(InputUiState.Base)
+            checkButton.update(CheckUiState.WrongAnswered)
+        }
+
+    }
+
+    object Empty : GameUiState {
+        override fun update(
+            scrambledTextView: UpdateText,
+            unscrambledEditText: UpdateUnscrambledEditText,
+            checkButton: UpdateCheckButton,
+            nextButton: UpdateVisibility,
+            skipButton: UpdateVisibility
+        ) = Unit
+
+    }
+}
+

@@ -43,11 +43,11 @@ class GamePage(scrambledWord: String) {
     )
 
     fun assertInitialState() {
-        scrambledWordUi.assertTextVisible()
         inputTextUi.assertInitialState()
         checkUi.assertNotEnabled()
         skipButtonUi.assertVisible()
         nextButtonUi.assertNotVisible()
+        scrambledWordUi.assertTextVisible()
     }
 
     fun input(text: String) {

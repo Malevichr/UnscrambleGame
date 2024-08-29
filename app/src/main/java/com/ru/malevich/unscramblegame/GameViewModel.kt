@@ -1,6 +1,9 @@
 package com.ru.malevich.unscramblegame
 
-class GameViewModel(private val repository: GameRepository) {
+import com.ru.malevich.unscramblegame.data.GameRepository
+import com.ru.malevich.unscramblegame.views.GameUiState
+
+class GameViewModel(val repository: GameRepository) {
     fun next(): GameUiState {
         repository.next()
         return init()
@@ -9,25 +12,36 @@ class GameViewModel(private val repository: GameRepository) {
     fun check(text: String): GameUiState {
         val data = repository.unscrambleTask()
         return if (data.checkUserAnswer(text))
-            GameUiState.RightAnswered(data.scrambledWord)
+            GameUiState.RightAnswered
         else
-            GameUiState.WrongAnswered(data.scrambledWord)
+            GameUiState.WrongAnswered
     }
 
-    fun handleUserInput(text: String): GameUiState {
-        val scrambledWord = repository.unscrambleTask().scrambledWord
-        return when (text.length) {
-            0 -> GameUiState.Initial(scrambledWord)
-            scrambledWord.length -> GameUiState.SufficientInput(scrambledWord)
-            else -> GameUiState.InsufficientInput(scrambledWord)
-        }
+    fun handleUserInput(
+        text: String,
+        scrambledWordRetrieved: String = ""
+    ): GameUiState {
+        val scrambledWord = if (scrambledWordRetrieved == "") {
+            repository.saveUserInput(text)
+            repository.unscrambleTask().scrambledWord
+        } else
+            scrambledWordRetrieved
+
+        return if (text.length == scrambledWord.length)
+            GameUiState.SufficientInput(text)
+        else
+            GameUiState.InsufficientInput(text)
     }
 
-    fun init(): GameUiState {
-        val data = repository.unscrambleTask()
-        return GameUiState.Initial(
-            data.scrambledWord
-        )
+    fun init(firstRun: Boolean = true): GameUiState {
+        return if (firstRun) {
+            val savedInput = repository.userInput()
+            val scrambledWord = repository.unscrambleTask().scrambledWord
+            if (savedInput == "")
+                GameUiState.Initial(scrambledWord)
+            else
+                handleUserInput(savedInput, scrambledWord)
+        } else
+            GameUiState.Empty
     }
-
 }
