@@ -35,7 +35,10 @@ interface GameUiState {
 
     }
 
-    data class InsufficientInput(private val userInput: String = "") : GameUiState {
+    data class InsufficientInput(
+        private val scrambledWord: String,
+        private val userInput: String = ""
+    ) : GameUiState {
         override fun update(
             scrambledTextView: UpdateText,
             unscrambledEditText: UpdateUnscrambledEditText,
@@ -43,6 +46,7 @@ interface GameUiState {
             nextButton: UpdateVisibility,
             skipButton: UpdateVisibility
         ) {
+            scrambledTextView.update(scrambledWord)
             unscrambledEditText.update(InputUiState.Base)
             unscrambledEditText.update(userInput)
             checkButton.update(CheckUiState.Disabled)
@@ -51,7 +55,10 @@ interface GameUiState {
 
     }
 
-    data class SufficientInput(private val userInput: String = "") :
+    data class SufficientInput(
+        private val scrambledWord: String,
+        private val userInput: String = ""
+    ) :
         GameUiState {
         override fun update(
             scrambledTextView: UpdateText,
@@ -60,6 +67,7 @@ interface GameUiState {
             nextButton: UpdateVisibility,
             skipButton: UpdateVisibility
         ) {
+            scrambledTextView.update(scrambledWord)
             unscrambledEditText.update(InputUiState.Base)
             unscrambledEditText.update(userInput)
             checkButton.update(CheckUiState.Enabled)
@@ -68,7 +76,7 @@ interface GameUiState {
 
     }
 
-    object RightAnswered
+    class RightAnswered(private val scrambledWord: String, private val userInput: String = "")
         : GameUiState {
         override fun update(
             scrambledTextView: UpdateText,
@@ -77,7 +85,9 @@ interface GameUiState {
             nextButton: UpdateVisibility,
             skipButton: UpdateVisibility
         ) {
+            scrambledTextView.update(scrambledWord)
             unscrambledEditText.update(InputUiState.RightAnswered)
+            unscrambledEditText.update(userInput)
             checkButton.update(CheckUiState.RightAnswered)
             nextButton.update(VisibilityUiState.Visible)
             skipButton.update(VisibilityUiState.Gone)
@@ -85,7 +95,7 @@ interface GameUiState {
 
     }
 
-    object WrongAnswered
+    class WrongAnswered(private val scrambledWord: String, private val userInput: String = "")
         : GameUiState {
         override fun update(
             scrambledTextView: UpdateText,
@@ -94,8 +104,12 @@ interface GameUiState {
             nextButton: UpdateVisibility,
             skipButton: UpdateVisibility
         ) {
+            scrambledTextView.update(scrambledWord)
             unscrambledEditText.update(InputUiState.Base)
+            unscrambledEditText.update(userInput)
             checkButton.update(CheckUiState.WrongAnswered)
+            nextButton.update(VisibilityUiState.Gone)
+            skipButton.update(VisibilityUiState.Visible)
         }
 
     }
