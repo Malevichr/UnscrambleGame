@@ -6,21 +6,25 @@ import com.ru.malevich.unscramblegame.views.GameUiState
 class GameViewModel(val repository: GameRepository) {
     fun next(): GameUiState {
         repository.next()
+        repository.saveChecked(false)
         return init()
     }
 
-    fun check(text: String): GameUiState {
+    fun check(text: String, checked: Boolean = false): GameUiState {
         val data = repository.unscrambleTask()
+        if (!checked)
+            repository.saveChecked(true)
         return if (data.checkUserAnswer(text))
-            GameUiState.RightAnswered
+            GameUiState.RightAnswered(data.scrambledWord, text)
         else
-            GameUiState.WrongAnswered
+            GameUiState.WrongAnswered(data.scrambledWord, text)
     }
 
     fun handleUserInput(
         text: String,
         scrambledWordRetrieved: String = ""
     ): GameUiState {
+        repository.saveChecked(false)
         val scrambledWord = if (scrambledWordRetrieved == "") {
             repository.saveUserInput(text)
             repository.unscrambleTask().scrambledWord
@@ -28,19 +32,23 @@ class GameViewModel(val repository: GameRepository) {
             scrambledWordRetrieved
 
         return if (text.length == scrambledWord.length)
-            GameUiState.SufficientInput(text)
+            GameUiState.SufficientInput(scrambledWord, text)
         else
-            GameUiState.InsufficientInput(text)
+            GameUiState.InsufficientInput(scrambledWord, text)
     }
 
     fun init(firstRun: Boolean = true): GameUiState {
         return if (firstRun) {
             val savedInput = repository.userInput()
             val scrambledWord = repository.unscrambleTask().scrambledWord
+
             if (savedInput == "")
                 GameUiState.Initial(scrambledWord)
             else
-                handleUserInput(savedInput, scrambledWord)
+                if (repository.checked())
+                    check(savedInput, true)
+                else
+                    handleUserInput(savedInput, scrambledWord)
         } else
             GameUiState.Empty
     }

@@ -4,6 +4,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.ru.malevich.unscramblegame.game.GamePage
+import com.ru.malevich.unscramblegame.gameover.GameOverPage
 import com.ru.malevich.unscramblegame.views.MainActivity
 import org.junit.After
 import org.junit.Before
@@ -16,6 +17,14 @@ import org.junit.runner.RunWith
 class ScenarioTest {
     private lateinit var gamePage: GamePage
     private lateinit var application: FakeApp
+
+    private fun doWithRecreate(
+        action: () -> Unit
+    ) {
+        action.invoke()
+        scenarioRule.scenario.recreate()
+        action.invoke()
+    }
     @Before
     fun setup(){
         gamePage = GamePage(scrambledWord = "auto".reversed())
@@ -183,6 +192,110 @@ class ScenarioTest {
         scenarioRule.scenario.recreate()
         gamePage.assertInitialState()
 
+    }
+
+    /**
+     * UGTC-05
+     */
+    @Test
+    fun caseNumber5() {
+        //region 2 incorrect
+        doWithRecreate { gamePage.assertInitialState() }
+
+        gamePage.input(text = "auau")
+        doWithRecreate { gamePage.assertSufficientInputState() }
+
+        gamePage.clickCheck()
+        doWithRecreate { gamePage.assertWrongAnsweredState() }
+
+        gamePage.clickSkip()
+        gamePage = GamePage(scrambledWord = "animal".reversed())
+        doWithRecreate { gamePage.assertInitialState() }
+
+        gamePage.input("animaa")
+        doWithRecreate { gamePage.assertSufficientInputState() }
+
+        gamePage.clickCheck()
+        doWithRecreate { gamePage.assertWrongAnsweredState() }
+
+        gamePage.clickSkip()
+        gamePage.assertDoesNotExist()
+        var gameOverPage = GameOverPage(
+            incorrects = 2,
+            corrects = 0
+        )
+        doWithRecreate { gameOverPage.assertInitialState() }
+
+        gameOverPage.clickNewGame()
+        gameOverPage.asserDoesNotExist()
+        //endregion
+
+        //region 1 incorrect and 1 correct
+        gamePage = GamePage(scrambledWord = "car".reversed())
+        doWithRecreate { gamePage.assertInitialState() }
+
+        gamePage.input("car")
+        doWithRecreate { gamePage.assertSufficientInputState() }
+
+        gamePage.clickCheck()
+        doWithRecreate { gamePage.assertRightAnsweredState() }
+
+        gamePage.clickNext()
+        doWithRecreate { gamePage.assertInitialState() }
+
+        gamePage = GamePage(scrambledWord = "egg".reversed())
+        doWithRecreate { gamePage.assertInitialState() }
+
+        gamePage.input("geg")
+        doWithRecreate { gamePage.assertSufficientInputState() }
+
+        gamePage.clickCheck()
+        doWithRecreate { gamePage.assertWrongAnsweredState() }
+
+        gamePage.clickSkip()
+
+        gamePage.assertDoesNotExist()
+        gameOverPage = GameOverPage(
+            incorrects = 1,
+            corrects = 1
+        )
+        doWithRecreate { gameOverPage.assertInitialState() }
+
+        gameOverPage.clickNewGame()
+        gameOverPage.asserDoesNotExist()
+        //endregion
+
+        //region 2 correct
+        gamePage = GamePage(scrambledWord = "bike".reversed())
+        doWithRecreate { gamePage.assertInitialState() }
+
+        gamePage.input("bike")
+        doWithRecreate { gamePage.assertSufficientInputState() }
+
+        gamePage.clickCheck()
+        doWithRecreate { gamePage.assertRightAnsweredState() }
+
+        gamePage.clickNext()
+        doWithRecreate { gamePage.assertInitialState() }
+
+        gamePage = GamePage(scrambledWord = "world".reversed())
+        doWithRecreate { gamePage.assertInitialState() }
+
+        gamePage.input("world")
+        doWithRecreate { gamePage.assertSufficientInputState() }
+
+        gamePage.clickCheck()
+        doWithRecreate { gamePage.assertRightAnsweredState() }
+
+        gamePage.clickNext()
+
+        gamePage.assertDoesNotExist()
+        gameOverPage = GameOverPage(
+            incorrects = 2,
+            corrects = 0
+        )
+        doWithRecreate { gameOverPage.assertInitialState() }
+        //endregion
     }
 }
 
