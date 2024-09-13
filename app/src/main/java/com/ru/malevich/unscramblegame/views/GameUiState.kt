@@ -76,7 +76,7 @@ interface GameUiState {
 
     }
 
-    class RightAnswered(private val scrambledWord: String, private val userInput: String = "")
+    data class RightAnswered(private val scrambledWord: String, private val userInput: String = "")
         : GameUiState {
         override fun update(
             scrambledTextView: UpdateText,
@@ -95,7 +95,7 @@ interface GameUiState {
 
     }
 
-    class WrongAnswered(private val scrambledWord: String, private val userInput: String = "")
+    data class WrongAnswered(private val scrambledWord: String, private val userInput: String = "")
         : GameUiState {
         override fun update(
             scrambledTextView: UpdateText,
@@ -122,7 +122,6 @@ interface GameUiState {
             nextButton: UpdateVisibility,
             skipButton: UpdateVisibility
         ) = Unit
-
     }
 }
 

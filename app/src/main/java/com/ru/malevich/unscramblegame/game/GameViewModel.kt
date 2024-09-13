@@ -1,6 +1,5 @@
-package com.ru.malevich.unscramblegame
+package com.ru.malevich.unscramblegame.game
 
-import com.ru.malevich.unscramblegame.data.GameRepository
 import com.ru.malevich.unscramblegame.views.GameUiState
 
 class GameViewModel(val repository: GameRepository) {

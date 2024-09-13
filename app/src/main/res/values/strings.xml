@@ -3,4 +3,6 @@
     <string name="check">check</string>
     <string name="skip">skip</string>
     <string name="next">next</string>
+    <string name="new_game">New Game</string>
+    <string name="stats">Game over\n Corrects: %d \n Incorrects: %d</string>
 </resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".views.MainActivity">
+
+    <com.ru.malevich.unscramblegame.views.scrambledwordtextview.ScrambledTextView
+        android:id="@+id/scrambledWordTextView"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        tools:text="Scrambled word" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:enabled="true">
+
+        <com.ru.malevich.unscramblegame.views.unscrambledwordedittext.UnscrambledWordEditText
+            android:id="@+id/inputText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5" />
+
+    <com.ru.malevich.unscramblegame.views.checkbutton.CheckButton
+        android:id="@+id/checkButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="#5451ED"
+        android:padding="24dp"
+        android:text="@string/check" />
+
+    <com.ru.malevich.quizgame.views.visibilitybutton.VisibilityButton
+        android:id="@+id/skipButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="#5451ED"
+        android:padding="24dp"
+        android:text="@string/skip" />
+
+    <com.ru.malevich.quizgame.views.visibilitybutton.VisibilityButton
+        android:id="@+id/nextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="#5451ED"
+        android:padding="24dp"
+        android:text="@string/next" />
+
+</LinearLayout>

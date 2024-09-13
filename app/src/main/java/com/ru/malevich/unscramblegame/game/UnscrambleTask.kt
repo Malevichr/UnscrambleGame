@@ -1,4 +1,4 @@
-package com.ru.malevich.unscramblegame.data
+package com.ru.malevich.unscramblegame.game
 
 data class UnscrambleTask(
     val unscrambledWord: String,

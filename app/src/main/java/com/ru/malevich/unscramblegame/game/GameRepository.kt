@@ -1,4 +1,8 @@
-package com.ru.malevich.unscramblegame.data
+package com.ru.malevich.unscramblegame.game
+
+import com.ru.malevich.unscramblegame.data.BooleanCache
+import com.ru.malevich.unscramblegame.data.IntCache
+import com.ru.malevich.unscramblegame.data.StringCache
 
 interface GameRepository {
 
