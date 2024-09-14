@@ -2,6 +2,7 @@ package com.ru.malevich.unscramblegame.views
 
 import com.ru.malevich.quizgame.views.visibilitybutton.UpdateVisibility
 import com.ru.malevich.quizgame.views.visibilitybutton.VisibilityUiState
+import com.ru.malevich.unscramblegame.gameover.NavigateToGameOver
 import com.ru.malevich.unscramblegame.views.checkbutton.CheckUiState
 import com.ru.malevich.unscramblegame.views.checkbutton.UpdateCheckButton
 import com.ru.malevich.unscramblegame.views.scrambledwordtextview.UpdateText
@@ -16,8 +17,21 @@ interface GameUiState {
         nextButton: UpdateVisibility,
         skipButton: UpdateVisibility
     )
+    fun navigate(navigate: NavigateToGameOver) = Unit
 
+    object Finish : GameUiState {
+        override fun update(
+            scrambledTextView: UpdateText,
+            unscrambledEditText: UpdateUnscrambledEditText,
+            checkButton: UpdateCheckButton,
+            nextButton: UpdateVisibility,
+            skipButton: UpdateVisibility
+        ) = Unit
 
+        override fun navigate(navigate: NavigateToGameOver) {
+            navigate.navigateToGameOver()
+        }
+    }
     data class Initial(private val scrambledWord: String) : GameUiState {
         override fun update(
             scrambledTextView: UpdateText,

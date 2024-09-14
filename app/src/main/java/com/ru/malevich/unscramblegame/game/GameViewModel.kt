@@ -6,6 +6,11 @@ class GameViewModel(val repository: GameRepository) {
     fun next(): GameUiState {
         repository.next()
         repository.saveChecked(false)
+        repository.incCorrects()
+        if (repository.isLastQuestion()) {
+            repository.clearProgress()
+            return GameUiState.Finish
+        }
         return init()
     }
 
@@ -44,11 +49,23 @@ class GameViewModel(val repository: GameRepository) {
             if (savedInput == "")
                 GameUiState.Initial(scrambledWord)
             else
-                if (repository.checked())
+                if (repository.isChecked())
                     check(savedInput, true)
                 else
                     handleUserInput(savedInput, scrambledWord)
         } else
             GameUiState.Empty
+    }
+
+    fun skip(): GameUiState {
+        repository.next()
+        repository.saveChecked(false)
+        repository.incIncorrects()
+        if (repository.isLastQuestion()) {
+            repository.clearProgress()
+            return GameUiState.Finish
+        }
+
+        return init()
     }
 }

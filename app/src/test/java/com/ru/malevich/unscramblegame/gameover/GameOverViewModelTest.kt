@@ -1,5 +1,6 @@
 package com.ru.malevich.unscramblegame.gameover
 
+import com.ru.malevich.unscramblegame.views.statstextview.StatsUiState
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -30,5 +31,9 @@ private class FakeRepository(
     GameOverRepository {
     override fun stats(): Pair<Int, Int> {
         return Pair(corrects, incorrects)
+    }
+
+    override fun clearStats() {
+        TODO("Not yet implemented")
     }
 }
