@@ -196,8 +196,7 @@ class GameViewModelTest {
 private class FakeRepository : GameRepository {
     private val list: List<String> = listOf(
         "auto",
-        "animal",
-        "car"
+        "animal"
     )
     private var listIndex = 0
     override fun unscrambleTask(): UnscrambleTask {
@@ -215,9 +214,25 @@ private class FakeRepository : GameRepository {
         checked = boolean
     }
 
-    override fun checked(): Boolean = checked
+    override fun isChecked(): Boolean = checked
     override fun next() {
         listIndex++
         savedText = ""
+    }
+
+    override fun clearProgress() {
+        TODO("Not yet implemented")
+    }
+
+    override fun incCorrects() {
+        TODO("Not yet implemented")
+    }
+
+    override fun incIncorrects() {
+        TODO("Not yet implemented")
+    }
+
+    override fun isLastQuestion(): Boolean {
+        TODO("Not yet implemented")
     }
 }

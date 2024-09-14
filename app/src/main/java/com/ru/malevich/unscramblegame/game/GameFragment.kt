@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ru.malevich.unscramblegame.ProvideViewModel
 import com.ru.malevich.unscramblegame.databinding.FragmentGameBinding
+import com.ru.malevich.unscramblegame.gameover.NavigateToGameOver
 import com.ru.malevich.unscramblegame.views.GameUiState
 
 class GameFragment : Fragment() {
@@ -34,6 +35,7 @@ class GameFragment : Fragment() {
             binding.nextButton,
             binding.skipButton
         )
+        uiState.navigate(requireActivity() as NavigateToGameOver)
     }
 
     override fun onCreateView(
@@ -62,7 +64,7 @@ class GameFragment : Fragment() {
         }
 
         binding.skipButton.setOnClickListener {
-            uiState = viewModel.next()
+            uiState = viewModel.skip()
             update.invoke()
         }
 

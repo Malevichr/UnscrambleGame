@@ -231,22 +231,20 @@ class ScenarioTest {
         //endregion
 
         //region 1 incorrect and 1 correct
-        gamePage = GamePage(scrambledWord = "car".reversed())
+        gamePage = GamePage(scrambledWord = "auto".reversed())
         doWithRecreate { gamePage.assertInitialState() }
 
-        gamePage.input("car")
+        gamePage.input("auto")
         doWithRecreate { gamePage.assertSufficientInputState() }
 
         gamePage.clickCheck()
         doWithRecreate { gamePage.assertRightAnsweredState() }
 
         gamePage.clickNext()
+        gamePage = GamePage(scrambledWord = "animal".reversed())
         doWithRecreate { gamePage.assertInitialState() }
 
-        gamePage = GamePage(scrambledWord = "egg".reversed())
-        doWithRecreate { gamePage.assertInitialState() }
-
-        gamePage.input("geg")
+        gamePage.input("animaa")
         doWithRecreate { gamePage.assertSufficientInputState() }
 
         gamePage.clickCheck()
@@ -266,22 +264,20 @@ class ScenarioTest {
         //endregion
 
         //region 2 correct
-        gamePage = GamePage(scrambledWord = "bike".reversed())
+        gamePage = GamePage(scrambledWord = "auto".reversed())
         doWithRecreate { gamePage.assertInitialState() }
 
-        gamePage.input("bike")
+        gamePage.input("auto")
         doWithRecreate { gamePage.assertSufficientInputState() }
 
         gamePage.clickCheck()
         doWithRecreate { gamePage.assertRightAnsweredState() }
 
         gamePage.clickNext()
+        gamePage = GamePage(scrambledWord = "animal".reversed())
         doWithRecreate { gamePage.assertInitialState() }
 
-        gamePage = GamePage(scrambledWord = "world".reversed())
-        doWithRecreate { gamePage.assertInitialState() }
-
-        gamePage.input("world")
+        gamePage.input("animal")
         doWithRecreate { gamePage.assertSufficientInputState() }
 
         gamePage.clickCheck()
@@ -291,8 +287,8 @@ class ScenarioTest {
 
         gamePage.assertDoesNotExist()
         gameOverPage = GameOverPage(
-            incorrects = 2,
-            corrects = 0
+            incorrects = 0,
+            corrects = 2
         )
         doWithRecreate { gameOverPage.assertInitialState() }
         //endregion
