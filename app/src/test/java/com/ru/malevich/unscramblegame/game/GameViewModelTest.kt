@@ -1,7 +1,5 @@
-package com.ru.malevich.unscramblegame
+package com.ru.malevich.unscramblegame.game
 
-import com.ru.malevich.unscramblegame.data.GameRepository
-import com.ru.malevich.unscramblegame.data.UnscrambleTask
 import com.ru.malevich.unscramblegame.views.GameUiState
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -14,10 +12,12 @@ import org.junit.Test
  */
 class GameViewModelTest {
     private lateinit var viewModel: GameViewModel
+    private lateinit var scrambledWord: String
 
     @Before
     fun setup() {
         viewModel = GameViewModel(repository = FakeRepository())
+        scrambledWord = "auto".reversed()
     }
 
     /**
@@ -26,34 +26,37 @@ class GameViewModelTest {
     @Test
     fun case1() {
         var actual: GameUiState = viewModel.init()
-        var expected: GameUiState = GameUiState.Initial(scrambledWord = "auto".reversed())
+
+        var expected: GameUiState = GameUiState.Initial(scrambledWord = scrambledWord)
         assertEquals(expected, actual)
 
         actual = viewModel.handleUserInput("au")
-        expected = GameUiState.InsufficientInput("au")
+        expected = GameUiState.InsufficientInput(scrambledWord, "au")
         assertEquals(expected, actual)
 
         actual = viewModel.handleUserInput("")
-        expected = GameUiState.InsufficientInput("")
+        expected = GameUiState.InsufficientInput(scrambledWord, "")
         assertEquals(expected, actual)
 
         actual = viewModel.handleUserInput("au")
-        expected = GameUiState.InsufficientInput("au")
+        expected = GameUiState.InsufficientInput(scrambledWord, "au")
         assertEquals(expected, actual)
 
         actual = viewModel.handleUserInput("auto")
         expected =
             GameUiState.SufficientInput(
+                scrambledWord,
                 "auto"
             )
         assertEquals(expected, actual)
 
         actual = viewModel.check("auto")
-        expected = GameUiState.RightAnswered
+        expected = GameUiState.RightAnswered(scrambledWord, "auto")
         assertEquals(expected, actual)
 
         actual = viewModel.next()
-        expected = GameUiState.Initial(scrambledWord = "animal".reversed())
+        scrambledWord = "animal".reversed()
+        expected = GameUiState.Initial(scrambledWord = scrambledWord)
         assertEquals(expected, actual)
     }
 
@@ -63,12 +66,13 @@ class GameViewModelTest {
     @Test
     fun case2() {
         var actual: GameUiState = viewModel.init()
-        var expected: GameUiState = GameUiState.Initial(scrambledWord = "auto".reversed())
+        var expected: GameUiState = GameUiState.Initial(scrambledWord = scrambledWord)
         assertEquals(expected, actual)
 
         actual = viewModel.handleUserInput("au")
         expected =
             GameUiState.InsufficientInput(
+                scrambledWord,
                 "au"
             )
         assertEquals(expected, actual)
@@ -76,17 +80,22 @@ class GameViewModelTest {
         actual = viewModel.handleUserInput("auau")
         expected =
             GameUiState.SufficientInput(
+                scrambledWord,
                 "auau"
             )
         assertEquals(expected, actual)
 
         actual = viewModel.check("auau")
-        expected = GameUiState.WrongAnswered
+        expected = GameUiState.WrongAnswered(
+            scrambledWord = scrambledWord,
+            "auau"
+        )
         assertEquals(expected, actual)
 
         actual = viewModel.handleUserInput("au")
         expected =
             GameUiState.InsufficientInput(
+                scrambledWord,
                 "au"
             )
         assertEquals(expected, actual)
@@ -94,12 +103,13 @@ class GameViewModelTest {
         actual = viewModel.handleUserInput("auto")
         expected =
             GameUiState.SufficientInput(
+                scrambledWord,
                 "auto"
             )
         assertEquals(expected, actual)
 
         actual = viewModel.check("auto")
-        expected = GameUiState.RightAnswered
+        expected = GameUiState.RightAnswered(scrambledWord = scrambledWord, "auto")
         assertEquals(expected, actual)
 
         actual = viewModel.next()
@@ -116,12 +126,13 @@ class GameViewModelTest {
     @Test
     fun case3() {
         var actual: GameUiState = viewModel.init()
-        var expected: GameUiState = GameUiState.Initial(scrambledWord = "auto".reversed())
+        var expected: GameUiState = GameUiState.Initial(scrambledWord = scrambledWord)
         assertEquals(expected, actual)
 
         actual = viewModel.handleUserInput("au")
         expected =
             GameUiState.InsufficientInput(
+                scrambledWord,
                 "au"
             )
         assertEquals(expected, actual)
@@ -143,6 +154,7 @@ class GameViewModelTest {
         actual = viewModel.handleUserInput("au")
         expected =
             GameUiState.InsufficientInput(
+                scrambledWord,
                 "au"
             )
         assertEquals(expected, actual)
@@ -150,6 +162,7 @@ class GameViewModelTest {
         actual = viewModel.handleUserInput("auau")
         expected =
             GameUiState.SufficientInput(
+                scrambledWord,
                 "auau"
             )
         assertEquals(expected, actual)
@@ -157,6 +170,7 @@ class GameViewModelTest {
         actual = viewModel.handleUserInput("auauu")
         expected =
             GameUiState.InsufficientInput(
+                scrambledWord,
                 "auauu"
             )
         assertEquals(expected, actual)
@@ -164,12 +178,13 @@ class GameViewModelTest {
         actual = viewModel.handleUserInput("auau")
         expected =
             GameUiState.SufficientInput(
+                scrambledWord,
                 "auau"
             )
         assertEquals(expected, actual)
 
         actual = viewModel.check("auau")
-        expected = GameUiState.WrongAnswered
+        expected = GameUiState.WrongAnswered(scrambledWord = scrambledWord, "auau")
         assertEquals(expected, actual)
 
         actual = viewModel.next()
@@ -195,7 +210,12 @@ private class FakeRepository : GameRepository {
     }
 
     override fun userInput() = savedText
+    private var checked = false
+    override fun saveChecked(boolean: Boolean) {
+        checked = boolean
+    }
 
+    override fun checked(): Boolean = checked
     override fun next() {
         listIndex++
         savedText = ""
