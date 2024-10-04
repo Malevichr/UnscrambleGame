@@ -40,7 +40,7 @@ interface GameUiState {
             nextButton: UpdateVisibility,
             skipButton: UpdateVisibility
         ) {
-            scrambledTextView.update(scrambledWord)
+            scrambledTextView.updateText(scrambledWord)
             unscrambledEditText.update(InputUiState.Initial)
             checkButton.update(CheckUiState.Disabled)
             nextButton.update(VisibilityUiState.Gone)
@@ -60,9 +60,9 @@ interface GameUiState {
             nextButton: UpdateVisibility,
             skipButton: UpdateVisibility
         ) {
-            scrambledTextView.update(scrambledWord)
+            scrambledTextView.updateText(scrambledWord)
             unscrambledEditText.update(InputUiState.Base)
-            unscrambledEditText.update(userInput)
+            unscrambledEditText.updateText(userInput)
             checkButton.update(CheckUiState.Disabled)
             nextButton.update(VisibilityUiState.Gone)
         }
@@ -81,9 +81,9 @@ interface GameUiState {
             nextButton: UpdateVisibility,
             skipButton: UpdateVisibility
         ) {
-            scrambledTextView.update(scrambledWord)
+            scrambledTextView.updateText(scrambledWord)
             unscrambledEditText.update(InputUiState.Base)
-            unscrambledEditText.update(userInput)
+            unscrambledEditText.updateText(userInput)
             checkButton.update(CheckUiState.Enabled)
             nextButton.update(VisibilityUiState.Gone)
         }
@@ -99,9 +99,9 @@ interface GameUiState {
             nextButton: UpdateVisibility,
             skipButton: UpdateVisibility
         ) {
-            scrambledTextView.update(scrambledWord)
+            scrambledTextView.updateText(scrambledWord)
             unscrambledEditText.update(InputUiState.RightAnswered)
-            unscrambledEditText.update(userInput)
+            unscrambledEditText.updateText(userInput)
             checkButton.update(CheckUiState.RightAnswered)
             nextButton.update(VisibilityUiState.Visible)
             skipButton.update(VisibilityUiState.Gone)
@@ -118,9 +118,9 @@ interface GameUiState {
             nextButton: UpdateVisibility,
             skipButton: UpdateVisibility
         ) {
-            scrambledTextView.update(scrambledWord)
+            scrambledTextView.updateText(scrambledWord)
             unscrambledEditText.update(InputUiState.Base)
-            unscrambledEditText.update(userInput)
+            unscrambledEditText.updateText(userInput)
             checkButton.update(CheckUiState.WrongAnswered)
             nextButton.update(VisibilityUiState.Gone)
             skipButton.update(VisibilityUiState.Visible)

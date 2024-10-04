@@ -41,7 +41,7 @@ class UnscrambledWordEditText : androidx.appcompat.widget.AppCompatEditText,
             text?.clear()
     }
 
-    override fun update(text: String) {
+    override fun updateText(text: String) {
         if (text != this.text.toString())
             this.setText(text)
     }

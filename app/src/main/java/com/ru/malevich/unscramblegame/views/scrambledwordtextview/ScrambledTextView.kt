@@ -14,12 +14,17 @@ class ScrambledTextView : AppCompatTextView, UpdateText {
     )
 
     override fun getFreezesText(): Boolean = true
-    override fun update(text: String) {
+    override fun updateText(text: String) {
         this.text = text
+    }
+
+    override fun updateTextResId(id: Int) {
+        setText(id)
     }
 
 }
 
 interface UpdateText {
-    fun update(text: String)
+    fun updateText(text: String)
+    fun updateTextResId(id: Int)
 }
