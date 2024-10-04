@@ -5,6 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.ru.malevich.unscramblegame.game.GamePage
 import com.ru.malevich.unscramblegame.gameover.GameOverPage
+import com.ru.malevich.unscramblegame.load.LoadPage
 import com.ru.malevich.unscramblegame.views.MainActivity
 import org.junit.Before
 import org.junit.Rule
@@ -285,6 +286,24 @@ class ScenarioTest {
         )
         doWithRecreate { gameOverPage.assertInitialState() }
         //endregion
+    }
+
+    /**
+     * UGTC-06
+     */
+    @Test
+    fun caseNumber6() {
+        val loadPage: LoadPage = LoadPage()
+        doWithRecreate { loadPage.assertProgressState() }
+
+        loadPage.waitTillError()
+        doWithRecreate { loadPage.assertErrorState() }
+
+        loadPage.clickRetry()
+        doWithRecreate { loadPage.assertProgressState() }
+
+        loadPage.waitTillGone()
+        doWithRecreate { gamePage.assertInitialState() }
     }
 }
 
