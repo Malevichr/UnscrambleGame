@@ -42,9 +42,7 @@ class ScenarioTest {
     @Test
     fun caseNumber1() {
 
-        gamePage.assertInitialState()
-        scenarioRule.scenario.recreate()
-        gamePage.assertInitialState()
+        caseNumber6()
 
         gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
@@ -86,10 +84,7 @@ class ScenarioTest {
      */
     @Test
     fun caseNumber2(){
-        scenarioRule.scenario.recreate()
-        gamePage.assertInitialState()
-        scenarioRule.scenario.recreate()
-        gamePage.assertInitialState()
+        caseNumber6()
 
         gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
@@ -134,9 +129,7 @@ class ScenarioTest {
      */
     @Test
     fun caseNumber3(){
-        gamePage.assertInitialState()
-        scenarioRule.scenario.recreate()
-        gamePage.assertInitialState()
+        caseNumber6()
 
         gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
@@ -161,9 +154,7 @@ class ScenarioTest {
      */
     @Test
     fun caseNumber4(){
-        gamePage.assertInitialState()
-        scenarioRule.scenario.recreate()
-        gamePage.assertInitialState()
+        caseNumber6()
 
         gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
@@ -194,7 +185,7 @@ class ScenarioTest {
     @Test
     fun caseNumber5() {
         //region 2 incorrect
-        doWithRecreate { gamePage.assertInitialState() }
+        caseNumber6()
 
         gamePage.input(text = "auau")
         doWithRecreate { gamePage.assertSufficientInputState() }
@@ -226,7 +217,7 @@ class ScenarioTest {
 
         //region 1 incorrect and 1 correct
         gamePage = GamePage(scrambledWord = "auto".reversed())
-        doWithRecreate { gamePage.assertInitialState() }
+        caseNumber6()
 
         gamePage.input("auto")
         doWithRecreate { gamePage.assertSufficientInputState() }
@@ -259,7 +250,7 @@ class ScenarioTest {
 
         //region 2 correct
         gamePage = GamePage(scrambledWord = "auto".reversed())
-        doWithRecreate { gamePage.assertInitialState() }
+        caseNumber6()
 
         gamePage.input("auto")
         doWithRecreate { gamePage.assertSufficientInputState() }
