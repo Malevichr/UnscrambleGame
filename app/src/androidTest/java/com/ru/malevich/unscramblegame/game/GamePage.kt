@@ -35,13 +35,13 @@ class GamePage(scrambledWord: String) {
         id = R.id.skipButton,
         textResId = R.string.skip,
         containerIdMatcher = containerIdMatcher,
-        containerClassIdMatcher = containerClassIdMatcher
+        containerClassMatcher = containerClassIdMatcher
     )
     private val nextButtonUi = ButtonUi(
         id = R.id.nextButton,
         textResId = R.string.next,
         containerIdMatcher = containerIdMatcher,
-        containerClassIdMatcher = containerClassIdMatcher
+        containerClassMatcher = containerClassIdMatcher
     )
 
     fun assertInitialState() {

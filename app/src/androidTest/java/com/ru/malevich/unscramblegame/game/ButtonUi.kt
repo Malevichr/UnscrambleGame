@@ -19,11 +19,11 @@ class ButtonUi(
     id: Int,
     @StringRes textResId: Int,
     containerIdMatcher: Matcher<View>,
-    containerClassIdMatcher: Matcher<View>
+    containerClassMatcher: Matcher<View>
 ) : AbstractButtonUi(
     onView(
         allOf(
-            containerClassIdMatcher,
+            containerClassMatcher,
             containerIdMatcher,
             withId(id),
             withText(textResId),
