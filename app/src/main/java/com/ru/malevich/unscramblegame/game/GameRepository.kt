@@ -26,7 +26,6 @@ interface GameRepository {
         private val list: List<String> = listOf(
             "auto",
             "animal",
-            "car"
         )
     ) : GameRepository {
         override fun unscrambleTask(): UnscrambleTask {

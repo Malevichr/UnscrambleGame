@@ -6,7 +6,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.ru.malevich.unscramblegame.game.GamePage
 import com.ru.malevich.unscramblegame.gameover.GameOverPage
 import com.ru.malevich.unscramblegame.views.MainActivity
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -16,7 +15,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ScenarioTest {
     private lateinit var gamePage: GamePage
-    private lateinit var application: FakeApp
+    private lateinit var application: UGApp
 
     private fun doWithRecreate(
         action: () -> Unit
@@ -29,15 +28,10 @@ class ScenarioTest {
     fun setup(){
         gamePage = GamePage(scrambledWord = "auto".reversed())
         application =
-            InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as FakeApp
-        application.resetViewModel()
-    }
-
-    @After
-    fun tearDown() {
-        application.resetViewModel()
+            InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as UGApp
 
     }
+
     @get:Rule
     val scenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
@@ -91,7 +85,6 @@ class ScenarioTest {
      */
     @Test
     fun caseNumber2(){
-        application.resetViewModel()
         scenarioRule.scenario.recreate()
         gamePage.assertInitialState()
         scenarioRule.scenario.recreate()

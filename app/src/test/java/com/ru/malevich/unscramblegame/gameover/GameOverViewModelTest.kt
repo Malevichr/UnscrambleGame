@@ -1,5 +1,7 @@
 package com.ru.malevich.unscramblegame.gameover
 
+import com.ru.malevich.unscramblegame.di.ClearViewModel
+import com.ru.malevich.unscramblegame.di.MyViewModel
 import com.ru.malevich.unscramblegame.views.statstextview.StatsUiState
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -13,12 +15,16 @@ class GameOverViewModelTest {
     @Before
     fun setup() {
         repository = FakeRepository(0, 2)
-        viewModel = GameOverViewModel(repository)
+        viewModel = GameOverViewModel(repository, object : ClearViewModel {
+            override fun clear(viewModelClass: Class<out MyViewModel>) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     @Test
     fun case1() {
-        val actual: StatsUiState = viewModel.statsUiState()
+        val actual: StatsUiState = viewModel.init(true)
         val expected: StatsUiState = StatsUiState.Base(corrects = 0, incorrects = 2)
         assertEquals(expected, actual)
     }

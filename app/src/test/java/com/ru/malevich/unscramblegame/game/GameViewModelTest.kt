@@ -1,5 +1,7 @@
 package com.ru.malevich.unscramblegame.game
 
+import com.ru.malevich.unscramblegame.di.ClearViewModel
+import com.ru.malevich.unscramblegame.di.MyViewModel
 import com.ru.malevich.unscramblegame.views.GameUiState
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -16,7 +18,13 @@ class GameViewModelTest {
 
     @Before
     fun setup() {
-        viewModel = GameViewModel(repository = FakeRepository())
+        viewModel = GameViewModel(
+            repository = FakeRepository(),
+            clearViewModel = object : ClearViewModel {
+                override fun clear(viewModelClass: Class<out MyViewModel>) = Unit
+
+            }
+        )
         scrambledWord = "auto".reversed()
     }
 
@@ -114,9 +122,6 @@ class GameViewModelTest {
 
         actual = viewModel.next()
         expected = GameUiState.Initial(scrambledWord = "animal".reversed())
-        assertEquals(expected, actual)
-        actual = viewModel.next()
-        expected = GameUiState.Initial(scrambledWord = "car".reversed())
         assertEquals(expected, actual)
     }
 
@@ -221,18 +226,14 @@ private class FakeRepository : GameRepository {
     }
 
     override fun clearProgress() {
-        TODO("Not yet implemented")
+        listIndex = 0
     }
 
     override fun incCorrects() {
-        TODO("Not yet implemented")
     }
 
     override fun incIncorrects() {
-        TODO("Not yet implemented")
     }
 
-    override fun isLastQuestion(): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun isLastQuestion(): Boolean = listIndex + 1 == list.size
 }

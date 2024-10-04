@@ -44,6 +44,11 @@ class StatsTextView : AppCompatTextView, UpdateStats {
 }
 
 interface StatsUiState : Serializable {
+    object Empty : StatsUiState {
+        override fun update(textView: UpdateStats) = Unit
+
+    }
+
     fun update(textView: UpdateStats)
     data class Base(private val corrects: Int, private val incorrects: Int) : StatsUiState {
         override fun update(textView: UpdateStats) {

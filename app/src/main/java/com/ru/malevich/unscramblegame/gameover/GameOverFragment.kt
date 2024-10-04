@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.ru.malevich.unscramblegame.ProvideViewModel
 import com.ru.malevich.unscramblegame.databinding.FragmentGameOverBinding
+import com.ru.malevich.unscramblegame.di.ProvideViewModel
 import com.ru.malevich.unscramblegame.game.NavigateToGame
 import com.ru.malevich.unscramblegame.views.statstextview.StatsUiState
 
@@ -27,12 +27,11 @@ class GameOverFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel: GameOverViewModel =
-            (requireActivity().application as ProvideViewModel).provideGameOverViewModel()
-        val uiState: StatsUiState = viewModel.statsUiState()
+            (requireActivity() as ProvideViewModel).provideViewModel(GameOverViewModel::class.java)
+        val uiState: StatsUiState = viewModel.init(savedInstanceState == null)
         binding.statsTextView.updateState(uiState)
-
+        viewModel.clear()
         binding.newGameButton.setOnClickListener {
-            viewModel.clear()
             (requireActivity() as NavigateToGame).navigateToGame()
         }
 

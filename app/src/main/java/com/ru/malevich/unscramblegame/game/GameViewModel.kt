@@ -1,16 +1,23 @@
 package com.ru.malevich.unscramblegame.game
 
+import com.ru.malevich.unscramblegame.di.ClearViewModel
+import com.ru.malevich.unscramblegame.di.MyViewModel
 import com.ru.malevich.unscramblegame.views.GameUiState
 
-class GameViewModel(val repository: GameRepository) {
+class GameViewModel(
+    private val repository: GameRepository,
+    private val clearViewModel: ClearViewModel
+) : MyViewModel {
+
     fun next(): GameUiState {
-        repository.next()
         repository.saveChecked(false)
         repository.incCorrects()
         if (repository.isLastQuestion()) {
+            clearViewModel.clear(GameViewModel::class.java)
             repository.clearProgress()
             return GameUiState.Finish
         }
+        repository.next()
         return init()
     }
 
@@ -58,14 +65,13 @@ class GameViewModel(val repository: GameRepository) {
     }
 
     fun skip(): GameUiState {
-        repository.next()
         repository.saveChecked(false)
         repository.incIncorrects()
         if (repository.isLastQuestion()) {
             repository.clearProgress()
             return GameUiState.Finish
         }
-
+        repository.next()
         return init()
     }
 }

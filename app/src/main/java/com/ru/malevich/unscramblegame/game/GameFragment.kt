@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.ru.malevich.unscramblegame.ProvideViewModel
 import com.ru.malevich.unscramblegame.databinding.FragmentGameBinding
+import com.ru.malevich.unscramblegame.di.ProvideViewModel
 import com.ru.malevich.unscramblegame.gameover.NavigateToGameOver
 import com.ru.malevich.unscramblegame.views.GameUiState
 
@@ -50,7 +50,8 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (requireActivity().application as ProvideViewModel).provideGameViewModel()
+        viewModel =
+            (requireActivity() as ProvideViewModel).provideViewModel(GameViewModel::class.java)
 
 
         binding.nextButton.setOnClickListener {
