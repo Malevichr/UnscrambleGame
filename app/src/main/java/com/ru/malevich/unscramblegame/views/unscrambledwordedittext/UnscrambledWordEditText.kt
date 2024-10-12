@@ -46,6 +46,10 @@ class UnscrambledWordEditText : androidx.appcompat.widget.AppCompatEditText,
             this.setText(text)
     }
 
+    override fun updateTextResId(id: Int) {
+        setText(id)
+    }
+
 }
 
 interface UpdateUnscrambledEditText : UpdateText {

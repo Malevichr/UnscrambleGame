@@ -36,6 +36,7 @@ class ScenarioTest {
     @get:Rule
     val scenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
+
     /**
      * UGTC-01
      */
@@ -47,6 +48,13 @@ class ScenarioTest {
         gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
         scenarioRule.scenario.recreate()
+
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            android.os.Process.killProcess(android.os.Process.myPid())
+            InstrumentationRegistry.getInstrumentation()
+                .waitForIdleSync()
+        }
+
         gamePage.assertInsufficientInputState()
 
 
