@@ -39,13 +39,18 @@ class ErrorTextView : AppCompatTextView, UpdateError {
     }
 
 
-    override fun updateTextResId(id: Int) {
+    override fun updateText(id: Int) {
         setText(id)
+    }
+
+    override fun updateText(text: String) {
+        this.text = text
     }
 }
 
 interface UpdateError {
     fun updateVisibility(visibility: Int)
-    fun updateTextResId(id: Int)
+    fun updateText(id: Int)
+    fun updateText(text: String)
     fun update(errorUiState: ErrorUiState)
 }

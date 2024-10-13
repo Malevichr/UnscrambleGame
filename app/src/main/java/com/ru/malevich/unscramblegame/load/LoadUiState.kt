@@ -31,19 +31,19 @@ interface LoadUiState {
         }
     }
 
-    class Progress : Abstract(
+    object Progress : Abstract(
         progressState = VisibilityUiState.Visible,
         errorState = ErrorUiState.Hide,
         retryState = VisibilityUiState.Gone
     )
 
-    class Error(errorTextResId: Int) : Abstract(
+    class Error(errorMessage: String) : Abstract(
         progressState = VisibilityUiState.Invisible,
-        errorState = ErrorUiState.Show(errorTextResId),
+        errorState = ErrorUiState.ShowMessage(errorMessage),
         retryState = VisibilityUiState.Visible
     )
 
-    class Success : LoadUiState {
+    object Success : LoadUiState {
         override fun navigate(navigateToGame: NavigateToGame) {
             navigateToGame.navigateToGame()
         }
