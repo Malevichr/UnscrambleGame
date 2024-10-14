@@ -1,6 +1,12 @@
 package com.ru.malevich.unscramblegame.load
 
 import com.ru.malevich.unscramblegame.load.data.LoadRepository
+import com.ru.malevich.unscramblegame.load.presentation.LoadUiObservable
+import com.ru.malevich.unscramblegame.load.presentation.LoadUiState
+import com.ru.malevich.unscramblegame.load.presentation.LoadViewModel
+import com.ru.malevich.unscramblegame.load.presentation.RunAsync
+import com.ru.malevich.unscramblegame.load.presentation.UiObservable
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -10,14 +16,17 @@ class LoadViewModelTest {
     private lateinit var viewModel: LoadViewModel
     private lateinit var repository: FakeLoadRepository
     private lateinit var observable: FakeLoadUiObservable
+    private lateinit var runAsync: FakeRunAsync
 
     @Before
     fun setup() {
         repository = FakeLoadRepository()
         observable = FakeLoadUiObservable.Base()
+        runAsync = FakeRunAsync()
         viewModel = LoadViewModel(
             repository = repository,
-            uiObservable = observable
+            uiObservable = observable,
+            runAsync = runAsync
         )
     }
 
@@ -32,29 +41,25 @@ class LoadViewModelTest {
         val fragment = FakeFragment()
         viewModel.startUpdates(observer = fragment)
         repository.assertLoadCalledCount(1)
-        observable.assertCurrentState(LoadUiState.Progress)
         fragment.assertLastState(LoadUiState.Progress)
         fragment.assertLoadStatesCount(1)
 
-        repository.returnResult()
+        runAsync.returnResult()
 
         repository.assertLoadCalledCount(1)
-        observable.assertCurrentState(LoadUiState.Error("error"))
         fragment.assertLastState(LoadUiState.Error("error"))
         fragment.assertLoadStatesCount(2)
 
-
+        repository.expectedSuccess()
         viewModel.load()
 
         repository.assertLoadCalledCount(2)
-        observable.assertCurrentState(LoadUiState.Progress)
         fragment.assertLastState(LoadUiState.Progress)
         fragment.assertLoadStatesCount(3)
 
-        repository.returnResult()
+        runAsync.returnResult()
 
         repository.assertLoadCalledCount(2)
-        observable.assertCurrentState(LoadUiState.Success)
         fragment.assertLastState(LoadUiState.Success)
         fragment.assertLoadStatesCount(4)
     }
@@ -71,16 +76,14 @@ class LoadViewModelTest {
         viewModel.startUpdates(observer = fragment)
 
         repository.assertLoadCalledCount(1)
-        observable.assertCurrentState(LoadUiState.Progress)
         fragment.assertLastState(LoadUiState.Progress)
         fragment.assertLoadStatesCount(1)
 
         viewModel.stopUpdates()
 
-        repository.returnResult()
+        runAsync.returnResult()
 
         repository.assertLoadCalledCount(1)
-        observable.assertCurrentState(LoadUiState.Error("error"))
         fragment.assertLastState(LoadUiState.Progress)
         fragment.assertLoadStatesCount(1)
 
@@ -90,24 +93,41 @@ class LoadViewModelTest {
         repository.assertLoadCalledCount(1)
         observable.assertCurrentState(LoadUiState.Error("error"))
 
-        viewModel.startUpdates(observer = fragment)
+        viewModel.startUpdates(observer = newInstanceFragment)
 
         newInstanceFragment.assertLastState(LoadUiState.Error("error"))
         newInstanceFragment.assertLoadStatesCount(1)
 
+        repository.expectedSuccess()
         viewModel.load()
 
         repository.assertLoadCalledCount(2)
-        observable.assertCurrentState(LoadUiState.Progress)
         newInstanceFragment.assertLastState(LoadUiState.Progress)
         newInstanceFragment.assertLoadStatesCount(2)
 
-        repository.returnResult()
+        runAsync.returnResult()
 
         repository.assertLoadCalledCount(2)
-        observable.assertCurrentState(LoadUiState.Success)
-        fragment.assertLastState(LoadUiState.Success)
-        fragment.assertLoadStatesCount(3)
+        newInstanceFragment.assertLastState(LoadUiState.Success)
+        newInstanceFragment.assertLoadStatesCount(3)
+    }
+}
+
+@Suppress("UNCHECKED_CAST")
+class FakeRunAsync : RunAsync {
+    private lateinit var uiUpdateCached: (Any) -> Unit
+    private lateinit var resultCached: Any
+    override fun <T : Any> runAsync(
+        coroutineScope: CoroutineScope,
+        heavyOperation: suspend () -> T,
+        uiUpdate: (T) -> Unit
+    ) = runBlocking {
+        resultCached = heavyOperation.invoke()
+        uiUpdateCached = uiUpdate as (Any) -> Unit
+    }
+
+    fun returnResult() {
+        uiUpdateCached.invoke(resultCached)
     }
 }
 
@@ -182,14 +202,12 @@ interface FakeUiObservable<T : Any> : UiObservable<T> {
 }
 
 class FakeLoadRepository : LoadRepository {
-    private var returnLoadResult: Boolean = false
     private var returnError: Boolean = false
     private var loadCalledCount = 0
     override suspend fun load() {
-        while (returnLoadResult) {
-            if (returnError)
-                throw IllegalStateException("error")
-        }
+        loadCalledCount++
+        if (returnError)
+            throw IllegalStateException("error")
     }
 
     fun expectedError() {
@@ -200,12 +218,8 @@ class FakeLoadRepository : LoadRepository {
         returnError = false
     }
 
-    fun returnResult() {
-        returnLoadResult = true
-    }
-
     fun assertLoadCalledCount(count: Int) {
-        assertEquals(loadCalledCount, count)
+        assertEquals(count, loadCalledCount)
     }
 }
 

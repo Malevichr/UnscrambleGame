@@ -1,4 +1,4 @@
-package com.ru.malevich.unscramblegame.load
+package com.ru.malevich.unscramblegame.load.presentation
 
 import com.ru.malevich.quizgame.views.visibilitybutton.UpdateVisibility
 import com.ru.malevich.quizgame.views.visibilitybutton.VisibilityUiState
@@ -37,7 +37,7 @@ interface LoadUiState {
         retryState = VisibilityUiState.Gone
     )
 
-    class Error(errorMessage: String) : Abstract(
+    data class Error(private val errorMessage: String) : Abstract(
         progressState = VisibilityUiState.Invisible,
         errorState = ErrorUiState.ShowMessage(errorMessage),
         retryState = VisibilityUiState.Visible

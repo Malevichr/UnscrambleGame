@@ -1,4 +1,4 @@
-package com.ru.malevich.unscramblegame.load
+package com.ru.malevich.unscramblegame.load.presentation
 
 interface UiObservable<T : Any> {
     fun postUiState(uiState: T)
