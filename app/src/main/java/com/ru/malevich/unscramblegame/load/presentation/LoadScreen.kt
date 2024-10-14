@@ -1,4 +1,4 @@
-package com.ru.malevich.unscramblegame.load
+package com.ru.malevich.unscramblegame.load.presentation
 
 import com.ru.malevich.unscramblegame.views.Screen
 
