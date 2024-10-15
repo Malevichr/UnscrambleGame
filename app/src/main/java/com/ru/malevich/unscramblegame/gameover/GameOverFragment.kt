@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ru.malevich.unscramblegame.databinding.FragmentGameOverBinding
 import com.ru.malevich.unscramblegame.di.ProvideViewModel
-import com.ru.malevich.unscramblegame.game.NavigateToGame
+import com.ru.malevich.unscramblegame.load.presentation.NavigateToLoad
 import com.ru.malevich.unscramblegame.views.statstextview.StatsUiState
 
 class GameOverFragment : Fragment() {
@@ -32,7 +32,7 @@ class GameOverFragment : Fragment() {
         binding.statsTextView.updateState(uiState)
         viewModel.clear()
         binding.newGameButton.setOnClickListener {
-            (requireActivity() as NavigateToGame).navigateToGame()
+            (requireActivity() as NavigateToLoad).navigateToLoad()
         }
 
     }

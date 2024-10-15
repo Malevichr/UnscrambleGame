@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:id="@+id/loadContainer"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <com.ru.malevich.unscramblegame.views.progress.ProgressView
         android:id="@+id/progressBar"
@@ -13,10 +15,13 @@
         android:id="@+id/errorTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:textSize="24sp" />
 
     <com.ru.malevich.quizgame.views.visibilitybutton.VisibilityButton
         android:id="@+id/retryButton"
+        android:text="@string/retry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp" />

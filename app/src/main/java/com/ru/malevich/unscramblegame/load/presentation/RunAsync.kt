@@ -18,7 +18,7 @@ interface RunAsync {
             heavyOperation: suspend () -> T,
             uiUpdate: (T) -> Unit
         ) {
-            coroutineScope.launch {
+            coroutineScope.launch(Dispatchers.IO) {
                 val result = heavyOperation.invoke()
                 withContext(Dispatchers.Main) {
                     uiUpdate.invoke(result)
