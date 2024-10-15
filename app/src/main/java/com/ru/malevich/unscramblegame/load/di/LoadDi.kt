@@ -1,9 +1,9 @@
 package com.ru.malevich.unscramblegame.load.di
 
-import com.ru.malevich.unscramblegame.di.Core
-import com.ru.malevich.unscramblegame.di.Module
-import com.ru.malevich.unscramblegame.di.MyViewModel
-import com.ru.malevich.unscramblegame.di.ProvideViewModel
+import com.ru.malevich.unscramblegame.core.di.Core
+import com.ru.malevich.unscramblegame.core.di.Module
+import com.ru.malevich.unscramblegame.core.di.MyViewModel
+import com.ru.malevich.unscramblegame.core.di.ProvideViewModel
 import com.ru.malevich.unscramblegame.load.data.LoadRepository
 import com.ru.malevich.unscramblegame.load.data.cloud.CloudDataSource
 import com.ru.malevich.unscramblegame.load.data.cloud.WordsService

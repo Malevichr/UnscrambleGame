@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".views.MainActivity">
+    tools:context=".main.presentation.MainActivity">
 
     <com.ru.malevich.unscramblegame.views.scrambledwordtextview.ScrambledTextView
         android:id="@+id/scrambledWordTextView"
