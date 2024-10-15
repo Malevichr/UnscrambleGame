@@ -29,14 +29,14 @@ interface ProvideViewModel {
 
     abstract class AbstractChainLink(
         protected val core: Core,
-        private val nextLinl: ProvideViewModel,
+        private val nextLink: ProvideViewModel,
         private val viewModelClass: Class<out MyViewModel>
     ) : ProvideViewModel {
         override fun <T : MyViewModel> provideViewModel(clazz: Class<T>): T {
             return if (viewModelClass == clazz)
                 module().viewModel() as T
             else
-                nextLinl.provideViewModel(clazz)
+                nextLink.provideViewModel(clazz)
         }
 
         protected abstract fun module(): Module<out MyViewModel>
