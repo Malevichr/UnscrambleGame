@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.ru.malevich.unscramblegame.core.di.ProvideViewModel
 import com.ru.malevich.unscramblegame.databinding.FragmentLoadBinding
-import com.ru.malevich.unscramblegame.di.ProvideViewModel
-import com.ru.malevich.unscramblegame.game.NavigateToGame
+import com.ru.malevich.unscramblegame.game.presentation.NavigateToGame
 
 class LoadFragment : Fragment() {
     private var _binding: FragmentLoadBinding? = null

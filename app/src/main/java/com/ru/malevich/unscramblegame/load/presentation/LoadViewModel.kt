@@ -1,6 +1,6 @@
 package com.ru.malevich.unscramblegame.load.presentation
 
-import com.ru.malevich.unscramblegame.di.MyViewModel
+import com.ru.malevich.unscramblegame.core.di.MyViewModel
 import com.ru.malevich.unscramblegame.load.data.LoadRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

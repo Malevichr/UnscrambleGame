@@ -2,7 +2,7 @@ package com.ru.malevich.unscramblegame.load.presentation
 
 import com.ru.malevich.quizgame.views.visibilitybutton.UpdateVisibility
 import com.ru.malevich.quizgame.views.visibilitybutton.VisibilityUiState
-import com.ru.malevich.unscramblegame.game.NavigateToGame
+import com.ru.malevich.unscramblegame.game.presentation.NavigateToGame
 import com.ru.malevich.unscramblegame.views.errortext.ErrorUiState
 import com.ru.malevich.unscramblegame.views.errortext.UpdateError
 

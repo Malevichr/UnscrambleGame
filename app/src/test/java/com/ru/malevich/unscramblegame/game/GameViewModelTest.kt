@@ -1,8 +1,11 @@
 package com.ru.malevich.unscramblegame.game
 
-import com.ru.malevich.unscramblegame.di.ClearViewModel
-import com.ru.malevich.unscramblegame.di.MyViewModel
-import com.ru.malevich.unscramblegame.views.GameUiState
+import com.ru.malevich.unscramblegame.core.di.ClearViewModel
+import com.ru.malevich.unscramblegame.core.di.MyViewModel
+import com.ru.malevich.unscramblegame.core.presentation.GameUiState
+import com.ru.malevich.unscramblegame.game.data.GameRepository
+import com.ru.malevich.unscramblegame.game.data.UnscrambleTask
+import com.ru.malevich.unscramblegame.game.presentation.GameViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

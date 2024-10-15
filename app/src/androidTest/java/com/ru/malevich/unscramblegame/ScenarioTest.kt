@@ -3,10 +3,11 @@ package com.ru.malevich.unscramblegame
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.ru.malevich.unscramblegame.core.UGApp
 import com.ru.malevich.unscramblegame.game.GamePage
 import com.ru.malevich.unscramblegame.gameover.GameOverPage
 import com.ru.malevich.unscramblegame.load.LoadPage
-import com.ru.malevich.unscramblegame.views.MainActivity
+import com.ru.malevich.unscramblegame.main.presentation.MainActivity
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -292,7 +293,7 @@ class ScenarioTest {
      */
     @Test
     fun caseNumber6() {
-        val loadPage: LoadPage = LoadPage()
+        val loadPage = LoadPage()
         doWithRecreate { loadPage.assertProgressState() }
 
         loadPage.waitTillError()
