@@ -1,5 +1,7 @@
 package com.ru.malevich.unscramblegame
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -8,6 +10,7 @@ import com.ru.malevich.unscramblegame.game.GamePage
 import com.ru.malevich.unscramblegame.gameover.GameOverPage
 import com.ru.malevich.unscramblegame.load.LoadPage
 import com.ru.malevich.unscramblegame.main.presentation.MainActivity
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -37,6 +40,13 @@ class ScenarioTest {
     @get:Rule
     val scenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
+    @After
+    fun clearPrefs() {
+        val sharedPreferences = ApplicationProvider
+            .getApplicationContext<Context>()
+            .getSharedPreferences("ugAppData", Context.MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
+    }
 
     /**
      * UGTC-01
@@ -49,12 +59,6 @@ class ScenarioTest {
         gamePage.input(text = "au")
         gamePage.assertInsufficientInputState()
         scenarioRule.scenario.recreate()
-
-        InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            android.os.Process.killProcess(android.os.Process.myPid())
-            InstrumentationRegistry.getInstrumentation()
-                .waitForIdleSync()
-        }
 
         gamePage.assertInsufficientInputState()
 
@@ -84,8 +88,6 @@ class ScenarioTest {
         gamePage.assertInitialState()
         scenarioRule.scenario.recreate()
         gamePage.assertInitialState()
-
-
     }
 
     /**
