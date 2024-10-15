@@ -9,7 +9,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import com.ru.malevich.unscramblegame.R
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
@@ -37,7 +36,7 @@ class ErrorUi(
 
     fun assertVisible() {
         interaction.check(matches(isDisplayed()))
-            .check(matches(withText(R.string.no_internet_connection)))
+            .check(matches(withText("error")))
     }
 
     fun waitTillVisible() {

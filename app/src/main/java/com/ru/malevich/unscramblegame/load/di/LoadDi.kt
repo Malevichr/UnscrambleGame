@@ -48,7 +48,10 @@ class LoadModule(private val core: Core) : Module<LoadViewModel> {
         val service = retrofit.create(WordsService::class.java)
 
         return LoadViewModel(
-            repository = LoadRepository.Base(
+            repository = if (core.runTest) {
+                LoadRepository.Fake()
+            } else
+                LoadRepository.Base(
                 cloudDataSource = CloudDataSource.Base(
                     service = service,
                     size = core.size
