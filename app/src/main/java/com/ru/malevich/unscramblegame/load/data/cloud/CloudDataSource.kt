@@ -18,9 +18,9 @@ interface CloudDataSource {
                 if (body.status in 200..299)
                     return body.words
                 else
-                    throw IllegalStateException("error, code ${body.status}")
+                    throw IllegalStateException(response.errorBody().toString())
             } else
-                throw IllegalStateException("not Successful")
+                throw IllegalStateException(response.errorBody().toString())
         }
     }
 }

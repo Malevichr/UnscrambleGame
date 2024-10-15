@@ -2,6 +2,7 @@ package com.ru.malevich.unscramblegame.di
 
 import com.ru.malevich.unscramblegame.game.ProvideGameViewModel
 import com.ru.malevich.unscramblegame.gameover.ProvideGameOverViewModel
+import com.ru.malevich.unscramblegame.load.di.ProvideLoadViewModel
 
 interface ProvideViewModel {
     fun <T : MyViewModel> provideViewModel(clazz: Class<T>): T
@@ -14,6 +15,7 @@ interface ProvideViewModel {
             chain = Error()
             chain = ProvideGameViewModel(core, chain)
             chain = ProvideGameOverViewModel(core, chain)
+            chain = ProvideLoadViewModel(core, chain)
         }
 
         override fun <T : MyViewModel> provideViewModel(clazz: Class<T>): T =

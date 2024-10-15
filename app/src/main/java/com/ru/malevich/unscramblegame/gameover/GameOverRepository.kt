@@ -17,6 +17,5 @@ interface GameOverRepository {
             corrects.default()
             incorrects.default()
         }
-
     }
 }

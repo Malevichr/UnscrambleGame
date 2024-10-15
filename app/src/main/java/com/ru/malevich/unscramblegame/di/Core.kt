@@ -7,4 +7,5 @@ class Core(
     val clearViewModel: ClearViewModel
 ) {
     val sharedPreferences = context.getSharedPreferences("ugAppData", Context.MODE_PRIVATE)
+    val size = 5
 }

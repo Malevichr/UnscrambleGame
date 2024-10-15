@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity(), Navigate, ProvideViewModel {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null)
-            navigateToGame()
+            navigateToLoad()
     }
 
     override fun navigate(screen: Screen) {
