@@ -9,7 +9,7 @@ import com.ru.malevich.unscramblegame.views.scrambledwordtextview.UpdateText
 import com.ru.malevich.unscramblegame.views.unscrambledwordedittext.InputUiState
 import com.ru.malevich.unscramblegame.views.unscrambledwordedittext.UpdateUnscrambledEditText
 
-interface GameUiState {
+interface GameUiState : UiState {
     fun update(
         scrambledTextView: UpdateText,
         unscrambledEditText: UpdateUnscrambledEditText,
@@ -126,16 +126,6 @@ interface GameUiState {
             skipButton.update(VisibilityUiState.Visible)
         }
 
-    }
-
-    object Empty : GameUiState {
-        override fun update(
-            scrambledTextView: UpdateText,
-            unscrambledEditText: UpdateUnscrambledEditText,
-            checkButton: UpdateCheckButton,
-            nextButton: UpdateVisibility,
-            skipButton: UpdateVisibility
-        ) = Unit
     }
 }
 

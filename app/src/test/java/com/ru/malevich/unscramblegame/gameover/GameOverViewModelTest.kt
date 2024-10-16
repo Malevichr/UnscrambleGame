@@ -1,7 +1,7 @@
 package com.ru.malevich.unscramblegame.gameover
 
 import com.ru.malevich.unscramblegame.core.di.ClearViewModel
-import com.ru.malevich.unscramblegame.core.di.MyViewModel
+import com.ru.malevich.unscramblegame.core.presentation.MyViewModel
 import com.ru.malevich.unscramblegame.gameover.data.GameOverRepository
 import com.ru.malevich.unscramblegame.gameover.presentation.GameOverViewModel
 import com.ru.malevich.unscramblegame.views.statstextview.StatsUiState

@@ -1,5 +1,7 @@
 package com.ru.malevich.unscramblegame.core.di
 
+import com.ru.malevich.unscramblegame.core.presentation.MyViewModel
+
 interface ManageViewModels : ProvideViewModel, ClearViewModel {
     class Factory(
         private val make: ProvideViewModel

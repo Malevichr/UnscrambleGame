@@ -1,12 +1,16 @@
 package com.ru.malevich.unscramblegame.game
 
 import com.ru.malevich.unscramblegame.core.di.ClearViewModel
-import com.ru.malevich.unscramblegame.core.di.MyViewModel
 import com.ru.malevich.unscramblegame.core.presentation.GameUiState
+import com.ru.malevich.unscramblegame.core.presentation.MyViewModel
 import com.ru.malevich.unscramblegame.game.data.GameRepository
 import com.ru.malevich.unscramblegame.game.data.UnscrambleTask
+import com.ru.malevich.unscramblegame.game.presentation.GameUiObservable
 import com.ru.malevich.unscramblegame.game.presentation.GameViewModel
-import org.junit.Assert.assertEquals
+import com.ru.malevich.unscramblegame.load.FakeFragment
+import com.ru.malevich.unscramblegame.load.FakeRunAsync
+import com.ru.malevich.unscramblegame.load.FakeUiObservable
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
@@ -18,57 +22,67 @@ import org.junit.Test
 class GameViewModelTest {
     private lateinit var viewModel: GameViewModel
     private lateinit var scrambledWord: String
-
+    private lateinit var runAsync: FakeRunAsync
+    private lateinit var observable: FakeGameUiObservable
+    private lateinit var fakeFragment: FakeFragment<GameUiState>
     @Before
     fun setup() {
+        fakeFragment = FakeFragment()
+        observable = FakeGameUiObservable.Base()
+        runAsync = FakeRunAsync()
         viewModel = GameViewModel(
             repository = FakeRepository(),
             clearViewModel = object : ClearViewModel {
                 override fun clear(viewModelClass: Class<out MyViewModel>) = Unit
-
-            }
+            },
+            runAsync = runAsync,
+            observable = observable
         )
         scrambledWord = "auto".reversed()
     }
 
+    private fun assertAsyncResult(gameUiState: GameUiState) {
+        runAsync.returnResult()
+        return fakeFragment.assertCurrentState(gameUiState)
+    }
     /**
      * UGTC-01
      */
     @Test
-    fun case1() {
-        var actual: GameUiState = viewModel.init()
-
+    fun case1() = runBlocking {
+        viewModel.init()
+        viewModel.startUpdates(fakeFragment)
         var expected: GameUiState = GameUiState.Initial(scrambledWord = scrambledWord)
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("au")
+        viewModel.handleUserInput("au")
         expected = GameUiState.InsufficientInput(scrambledWord, "au")
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("")
+        viewModel.handleUserInput("")
         expected = GameUiState.InsufficientInput(scrambledWord, "")
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("au")
+        viewModel.handleUserInput("au")
         expected = GameUiState.InsufficientInput(scrambledWord, "au")
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("auto")
+        viewModel.handleUserInput("auto")
         expected =
             GameUiState.SufficientInput(
                 scrambledWord,
                 "auto"
             )
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.check("auto")
+        viewModel.check("auto")
         expected = GameUiState.RightAnswered(scrambledWord, "auto")
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.next()
+        viewModel.next()
         scrambledWord = "animal".reversed()
         expected = GameUiState.Initial(scrambledWord = scrambledWord)
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
     }
 
     /**
@@ -76,56 +90,57 @@ class GameViewModelTest {
      */
     @Test
     fun case2() {
-        var actual: GameUiState = viewModel.init()
+        viewModel.init()
+        viewModel.startUpdates(fakeFragment)
         var expected: GameUiState = GameUiState.Initial(scrambledWord = scrambledWord)
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("au")
+        viewModel.handleUserInput("au")
         expected =
             GameUiState.InsufficientInput(
                 scrambledWord,
                 "au"
             )
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("auau")
+        viewModel.handleUserInput("auau")
         expected =
             GameUiState.SufficientInput(
                 scrambledWord,
                 "auau"
             )
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.check("auau")
+        viewModel.check("auau")
         expected = GameUiState.WrongAnswered(
             scrambledWord = scrambledWord,
             "auau"
         )
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("au")
+        viewModel.handleUserInput("au")
         expected =
             GameUiState.InsufficientInput(
                 scrambledWord,
                 "au"
             )
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("auto")
+        viewModel.handleUserInput("auto")
         expected =
             GameUiState.SufficientInput(
                 scrambledWord,
                 "auto"
             )
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.check("auto")
+        viewModel.check("auto")
         expected = GameUiState.RightAnswered(scrambledWord = scrambledWord, "auto")
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.next()
+        viewModel.next()
         expected = GameUiState.Initial(scrambledWord = "animal".reversed())
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
     }
 
     /**
@@ -133,21 +148,22 @@ class GameViewModelTest {
      */
     @Test
     fun case3() {
-        var actual: GameUiState = viewModel.init()
+        viewModel.init()
+        viewModel.startUpdates(fakeFragment)
         var expected: GameUiState = GameUiState.Initial(scrambledWord = scrambledWord)
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("au")
+        viewModel.handleUserInput("au")
         expected =
             GameUiState.InsufficientInput(
                 scrambledWord,
                 "au"
             )
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.next()
+        viewModel.next()
         expected = GameUiState.Initial(scrambledWord = "animal".reversed())
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
     }
 
     /**
@@ -155,49 +171,50 @@ class GameViewModelTest {
      */
     @Test
     fun case4() {
-        var actual: GameUiState = viewModel.init()
+        viewModel.init()
+        viewModel.startUpdates(fakeFragment)
         var expected: GameUiState = GameUiState.Initial(scrambledWord = "auto".reversed())
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("au")
+        viewModel.handleUserInput("au")
         expected =
             GameUiState.InsufficientInput(
                 scrambledWord,
                 "au"
             )
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("auau")
+        viewModel.handleUserInput("auau")
         expected =
             GameUiState.SufficientInput(
                 scrambledWord,
                 "auau"
             )
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("auauu")
+        viewModel.handleUserInput("auauu")
         expected =
             GameUiState.InsufficientInput(
                 scrambledWord,
                 "auauu"
             )
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.handleUserInput("auau")
+        viewModel.handleUserInput("auau")
         expected =
             GameUiState.SufficientInput(
                 scrambledWord,
                 "auau"
             )
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.check("auau")
+        viewModel.check("auau")
         expected = GameUiState.WrongAnswered(scrambledWord = scrambledWord, "auau")
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
 
-        actual = viewModel.next()
+        viewModel.next()
         expected = GameUiState.Initial(scrambledWord = "animal".reversed())
-        assertEquals(expected, actual)
+        assertAsyncResult(expected)
     }
 }
 
@@ -207,7 +224,7 @@ private class FakeRepository : GameRepository {
         "animal"
     )
     private var listIndex = 0
-    override fun unscrambleTask(): UnscrambleTask {
+    override suspend fun unscrambleTask(): UnscrambleTask {
         val word: String = list[listIndex]
         return UnscrambleTask(unscrambledWord = word, scrambledWord = word.reversed())
     }
@@ -217,12 +234,6 @@ private class FakeRepository : GameRepository {
     }
 
     override fun userInput() = savedText
-    private var checked = false
-    override fun saveChecked(boolean: Boolean) {
-        checked = boolean
-    }
-
-    override fun isChecked(): Boolean = checked
     override fun next() {
         listIndex++
         savedText = ""
@@ -239,4 +250,8 @@ private class FakeRepository : GameRepository {
     }
 
     override fun isLastQuestion(): Boolean = listIndex + 1 == list.size
+}
+
+private interface FakeGameUiObservable : FakeUiObservable<GameUiState>, GameUiObservable {
+    class Base : FakeUiObservable.Abstract<GameUiState>(), FakeGameUiObservable
 }

@@ -1,8 +1,10 @@
 package com.ru.malevich.unscramblegame.core.di
 
+import com.ru.malevich.unscramblegame.core.presentation.MyViewModel
 import com.ru.malevich.unscramblegame.game.di.ProvideGameViewModel
 import com.ru.malevich.unscramblegame.gameover.di.ProvideGameOverViewModel
 import com.ru.malevich.unscramblegame.load.di.ProvideLoadViewModel
+import com.ru.malevich.unscramblegame.main.di.ProvideMainViewModel
 
 interface ProvideViewModel {
     fun <T : MyViewModel> provideViewModel(clazz: Class<T>): T
@@ -16,6 +18,7 @@ interface ProvideViewModel {
             chain = ProvideGameViewModel(core, chain)
             chain = ProvideGameOverViewModel(core, chain)
             chain = ProvideLoadViewModel(core, chain)
+            chain = ProvideMainViewModel(core, chain)
         }
 
         override fun <T : MyViewModel> provideViewModel(clazz: Class<T>): T =
@@ -44,5 +47,3 @@ interface ProvideViewModel {
         protected abstract fun module(): Module<out MyViewModel>
     }
 }
-
-interface MyViewModel

@@ -15,7 +15,6 @@ import com.ru.malevich.unscramblegame.gameover.presentation.NavigateToGameOver
 class GameFragment : Fragment() {
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
-    private lateinit var uiState: GameUiState
     private lateinit var viewModel: GameViewModel
     private val textWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
@@ -23,11 +22,10 @@ class GameFragment : Fragment() {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
 
         override fun afterTextChanged(s: Editable?) {
-            uiState = viewModel.handleUserInput(text = binding.inputText.text.toString())
-            update.invoke()
+            viewModel.handleUserInput(text = binding.inputText.text.toString())
         }
     }
-    private val update: () -> Unit = {
+    private val update: (GameUiState) -> Unit = { uiState ->
         uiState.update(
             binding.scrambledWordTextView,
             binding.inputText,
@@ -55,32 +53,30 @@ class GameFragment : Fragment() {
 
 
         binding.nextButton.setOnClickListener {
-            uiState = viewModel.next()
-            update.invoke()
+            viewModel.next()
         }
 
         binding.checkButton.setOnClickListener {
-            uiState = viewModel.check(text = binding.inputText.text.toString())
-            update.invoke()
+            viewModel.check(text = binding.inputText.text.toString())
         }
 
         binding.skipButton.setOnClickListener {
-            uiState = viewModel.skip()
-            update.invoke()
+            viewModel.skip()
         }
 
-        uiState = viewModel.init(savedInstanceState == null)
-        update.invoke()
+        viewModel.init(savedInstanceState == null)
     }
 
     override fun onResume() {
         super.onResume()
         binding.inputText.addTextChangedListener(textWatcher)
+        viewModel.startUpdates(observer = update)
     }
 
     override fun onPause() {
         super.onPause()
         binding.inputText.removeTextChangedListener(textWatcher)
+        viewModel.stopUpdates()
     }
 
     override fun onDestroyView() {

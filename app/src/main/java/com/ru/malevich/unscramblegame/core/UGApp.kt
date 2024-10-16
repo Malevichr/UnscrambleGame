@@ -4,8 +4,8 @@ import android.app.Application
 import com.ru.malevich.unscramblegame.core.di.ClearViewModel
 import com.ru.malevich.unscramblegame.core.di.Core
 import com.ru.malevich.unscramblegame.core.di.ManageViewModels
-import com.ru.malevich.unscramblegame.core.di.MyViewModel
 import com.ru.malevich.unscramblegame.core.di.ProvideViewModel
+import com.ru.malevich.unscramblegame.core.presentation.MyViewModel
 
 class UGApp : Application(), ProvideViewModel {
     private lateinit var viewModelFactory: ManageViewModels

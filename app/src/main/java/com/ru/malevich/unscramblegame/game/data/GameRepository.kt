@@ -1,16 +1,14 @@
 package com.ru.malevich.unscramblegame.game.data
 
-import com.ru.malevich.unscramblegame.core.data.BooleanCache
 import com.ru.malevich.unscramblegame.core.data.IntCache
 import com.ru.malevich.unscramblegame.core.data.StringCache
+import com.ru.malevich.unscramblegame.load.data.cache.WordsDao
 
 interface GameRepository {
 
-    fun unscrambleTask(): UnscrambleTask
+    suspend fun unscrambleTask(): UnscrambleTask
     fun saveUserInput(input: String)
     fun userInput(): String
-    fun saveChecked(boolean: Boolean)
-    fun isChecked(): Boolean
     fun next()
     fun clearProgress()
     fun incCorrects()
@@ -18,19 +16,21 @@ interface GameRepository {
     fun isLastQuestion(): Boolean
 
     class Base(
-        private val listIndex: IntCache,
+        private val index: IntCache,
         private val userInputText: StringCache,
-        private val checked: BooleanCache,
         private val corrects: IntCache,
         private val incorrects: IntCache,
         private val shuffleWord: ShuffleWord,
+        private val dao: WordsDao,
         private val size: Int
     ) : GameRepository {
-        override fun unscrambleTask(): UnscrambleTask {
-//            val word: String = list[listIndex.read()]
+        override suspend fun unscrambleTask(): UnscrambleTask {
+            val listIndex = index.read() % size
+            this.index.save(listIndex)
+            val word: String = dao.word(listIndex).word
             return UnscrambleTask(
-                unscrambledWord = "word",
-                scrambledWord = shuffleWord.shuffle("word")
+                unscrambledWord = word,
+                scrambledWord = shuffleWord.shuffle(word)
             )
         }
 
@@ -42,25 +42,18 @@ interface GameRepository {
             return userInputText.read()
         }
 
-        override fun saveChecked(boolean: Boolean) {
-            checked.save(boolean)
-        }
-
-        override fun isChecked() = checked.read()
-
         override fun next() {
-//            listIndex.save((listIndex.read() + 1) % list.size)
+            index.save(index.read() % size + 1)
             userInputText.save("")
         }
 
         override fun clearProgress() {
-            listIndex.default()
-            checked.save(false)
+            index.default()
             userInputText.save("")
         }
 
         override fun isLastQuestion(): Boolean =
-            listIndex.read() + 1 == size
+            index.read() + 1 == size
 
         override fun incCorrects() {
             corrects.increment()
@@ -75,7 +68,6 @@ interface GameRepository {
     class Fake(
         private val listIndex: IntCache,
         private val userInputText: StringCache,
-        private val checked: BooleanCache,
         private val corrects: IntCache,
         private val incorrects: IntCache,
         private val shuffleWord: ShuffleWord,
@@ -85,8 +77,10 @@ interface GameRepository {
         ),
 
         ) : GameRepository {
-        override fun unscrambleTask(): UnscrambleTask {
-            val word: String = list[listIndex.read()]
+        override suspend fun unscrambleTask(): UnscrambleTask {
+            val listIndex = listIndex.read() % list.size
+            this.listIndex.save(listIndex)
+            val word: String = list[listIndex]
             return UnscrambleTask(unscrambledWord = word, scrambledWord = shuffleWord.shuffle(word))
         }
 
@@ -97,20 +91,14 @@ interface GameRepository {
         override fun userInput(): String {
             return userInputText.read()
         }
-        override fun saveChecked(boolean: Boolean) {
-            checked.save(boolean)
-        }
-
-        override fun isChecked() = checked.read()
 
         override fun next() {
-            listIndex.save((listIndex.read() + 1) % list.size)
+            listIndex.save(listIndex.read() % list.size + 1)
             userInputText.save("")
         }
 
         override fun clearProgress() {
             listIndex.default()
-            checked.save(false)
             userInputText.save("")
         }
 

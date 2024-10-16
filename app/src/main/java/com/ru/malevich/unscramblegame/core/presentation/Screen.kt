@@ -4,6 +4,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 
 interface Screen {
+    object Empty : Screen {
+        override fun show(containerId: Int, fragmentManager: FragmentManager) {
+        }
+
+    }
+
     fun show(containerId: Int, fragmentManager: FragmentManager)
 
     abstract class Replace(private val fragment: Class<out Fragment>) : Screen {
