@@ -2,14 +2,14 @@ package com.ru.malevich.unscramblegame.load.di
 
 import com.ru.malevich.unscramblegame.core.di.Core
 import com.ru.malevich.unscramblegame.core.di.Module
-import com.ru.malevich.unscramblegame.core.di.MyViewModel
 import com.ru.malevich.unscramblegame.core.di.ProvideViewModel
+import com.ru.malevich.unscramblegame.core.presentation.MyViewModel
 import com.ru.malevich.unscramblegame.load.data.LoadRepository
+import com.ru.malevich.unscramblegame.load.data.cache.CacheDataSource
 import com.ru.malevich.unscramblegame.load.data.cloud.CloudDataSource
 import com.ru.malevich.unscramblegame.load.data.cloud.WordsService
 import com.ru.malevich.unscramblegame.load.presentation.LoadUiObservable
 import com.ru.malevich.unscramblegame.load.presentation.LoadViewModel
-import com.ru.malevich.unscramblegame.load.presentation.RunAsync
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -54,11 +54,15 @@ class LoadModule(private val core: Core) : Module<LoadViewModel> {
                 LoadRepository.Base(
                 cloudDataSource = CloudDataSource.Base(
                     service = service,
-                    size = core.size
+                    size = core.size,
+                ), cacheDataSource = CacheDataSource.Base(
+                        clearDatabase = core.cacheModule.clearDatabase(),
+                        dao = core.cacheModule.dao()
                 )
             ),
             uiObservable = LoadUiObservable.Base(),
-            runAsync = RunAsync.Base()
+            runAsync = core.runAsync,
+            clearViewModel = core.clearViewModel
         )
     }
 }

@@ -1,5 +1,8 @@
 package com.ru.malevich.unscramblegame.load
 
+import com.ru.malevich.unscramblegame.core.di.ClearViewModel
+import com.ru.malevich.unscramblegame.core.presentation.MyViewModel
+import com.ru.malevich.unscramblegame.core.presentation.UiState
 import com.ru.malevich.unscramblegame.load.data.LoadRepository
 import com.ru.malevich.unscramblegame.load.presentation.LoadUiObservable
 import com.ru.malevich.unscramblegame.load.presentation.LoadUiState
@@ -26,7 +29,10 @@ class LoadViewModelTest {
         viewModel = LoadViewModel(
             repository = repository,
             uiObservable = observable,
-            runAsync = runAsync
+            runAsync = runAsync,
+            clearViewModel = object : ClearViewModel {
+                override fun clear(viewModelClass: Class<out MyViewModel>) {}
+            }
         )
     }
 
@@ -38,29 +44,29 @@ class LoadViewModelTest {
         repository.assertLoadCalledCount(1)
         observable.assertCurrentState(LoadUiState.Progress)
 
-        val fragment = FakeFragment()
+        val fragment = FakeFragment<LoadUiState>()
         viewModel.startUpdates(observer = fragment)
         repository.assertLoadCalledCount(1)
-        fragment.assertLastState(LoadUiState.Progress)
+        fragment.assertCurrentState(LoadUiState.Progress)
         fragment.assertLoadStatesCount(1)
 
         runAsync.returnResult()
 
         repository.assertLoadCalledCount(1)
-        fragment.assertLastState(LoadUiState.Error("error"))
+        fragment.assertCurrentState(LoadUiState.Error("error"))
         fragment.assertLoadStatesCount(2)
 
         repository.expectedSuccess()
         viewModel.load()
 
         repository.assertLoadCalledCount(2)
-        fragment.assertLastState(LoadUiState.Progress)
+        fragment.assertCurrentState(LoadUiState.Progress)
         fragment.assertLoadStatesCount(3)
 
         runAsync.returnResult()
 
         repository.assertLoadCalledCount(2)
-        fragment.assertLastState(LoadUiState.Success)
+        fragment.assertCurrentState(LoadUiState.Success)
         fragment.assertLoadStatesCount(4)
     }
 
@@ -72,11 +78,11 @@ class LoadViewModelTest {
         repository.assertLoadCalledCount(1)
         observable.assertCurrentState(LoadUiState.Progress)
 
-        val fragment = FakeFragment()
+        val fragment = FakeFragment<LoadUiState>()
         viewModel.startUpdates(observer = fragment)
 
         repository.assertLoadCalledCount(1)
-        fragment.assertLastState(LoadUiState.Progress)
+        fragment.assertCurrentState(LoadUiState.Progress)
         fragment.assertLoadStatesCount(1)
 
         viewModel.stopUpdates()
@@ -84,10 +90,10 @@ class LoadViewModelTest {
         runAsync.returnResult()
 
         repository.assertLoadCalledCount(1)
-        fragment.assertLastState(LoadUiState.Progress)
+        fragment.assertCurrentState(LoadUiState.Progress)
         fragment.assertLoadStatesCount(1)
 
-        val newInstanceFragment = FakeFragment()
+        val newInstanceFragment = FakeFragment<LoadUiState>()
         viewModel.load(isFirstRun = false)
 
         repository.assertLoadCalledCount(1)
@@ -95,20 +101,20 @@ class LoadViewModelTest {
 
         viewModel.startUpdates(observer = newInstanceFragment)
 
-        newInstanceFragment.assertLastState(LoadUiState.Error("error"))
+        newInstanceFragment.assertCurrentState(LoadUiState.Error("error"))
         newInstanceFragment.assertLoadStatesCount(1)
 
         repository.expectedSuccess()
         viewModel.load()
 
         repository.assertLoadCalledCount(2)
-        newInstanceFragment.assertLastState(LoadUiState.Progress)
+        newInstanceFragment.assertCurrentState(LoadUiState.Progress)
         newInstanceFragment.assertLoadStatesCount(2)
 
         runAsync.returnResult()
 
         repository.assertLoadCalledCount(2)
-        newInstanceFragment.assertLastState(LoadUiState.Success)
+        newInstanceFragment.assertCurrentState(LoadUiState.Success)
         newInstanceFragment.assertLoadStatesCount(3)
     }
 }
@@ -132,23 +138,23 @@ class FakeRunAsync : RunAsync {
 }
 
 
-class FakeFragment : (LoadUiState) -> Unit {
-    private val loadStates = mutableListOf<LoadUiState>()
-    override fun invoke(p1: LoadUiState) {
-        loadStates.add(p1)
+class FakeFragment<T : UiState> : (T) -> Unit {
+    private val states = mutableListOf<T>()
+    override fun invoke(p1: T) {
+        states.add(p1)
     }
 
-    fun assertLastState(state: LoadUiState) {
-        assertEquals(state, loadStates.last())
+    fun assertCurrentState(state: T) {
+        assertEquals(state, states.last())
     }
 
     fun assertLoadStatesCount(count: Int) {
-        assertEquals(count, loadStates.size)
+        assertEquals(count, states.size)
     }
 }
 
 interface FakeUiObservable<T : Any> : UiObservable<T> {
-    fun assertCurrentState(state: LoadUiState)
+    fun assertCurrentState(state: T)
     fun assertRegisterCalledTimes(times: Int)
     fun assertUnregisterCalledTimes(times: Int)
     fun assertPostCalledTimes(times: Int)
@@ -195,7 +201,7 @@ interface FakeUiObservable<T : Any> : UiObservable<T> {
             this.observerCached = null
         }
 
-        override fun assertCurrentState(state: LoadUiState) {
+        override fun assertCurrentState(state: T) {
             assertEquals(state, uiStateCached)
         }
     }

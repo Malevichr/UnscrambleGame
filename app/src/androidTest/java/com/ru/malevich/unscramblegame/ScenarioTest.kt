@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import com.ru.malevich.unscramblegame.core.UGApp
 import com.ru.malevich.unscramblegame.game.GamePage
 import com.ru.malevich.unscramblegame.gameover.GameOverPage
 import com.ru.malevich.unscramblegame.load.LoadPage
@@ -20,7 +18,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ScenarioTest {
     private lateinit var gamePage: GamePage
-    private lateinit var application: UGApp
 
     private fun doWithRecreate(
         action: () -> Unit
@@ -32,9 +29,6 @@ class ScenarioTest {
     @Before
     fun setup(){
         gamePage = GamePage(scrambledWord = "auto".reversed())
-        application =
-            InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as UGApp
-
     }
 
     @get:Rule

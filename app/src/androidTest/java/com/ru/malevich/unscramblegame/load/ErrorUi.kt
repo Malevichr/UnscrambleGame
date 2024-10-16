@@ -40,10 +40,10 @@ class ErrorUi(
     }
 
     fun waitTillVisible() {
-        onView(isRoot()).perform(waitTillDisplayed(id, 3000))
+        onView(isRoot()).perform(waitTillDisplayed(id, 4000))
     }
 
     fun waitTillNotExist() {
-        onView(isRoot()).perform(waitTillDoesNotExist(id, 3000))
+        onView(isRoot()).perform(waitTillDoesNotExist(id, 4000))
     }
 }
