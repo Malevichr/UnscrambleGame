@@ -6,16 +6,13 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.ru.malevich.unscramblegame.core.di.ProvideViewModel
+import com.ru.malevich.unscramblegame.core.presentation.AbstractFragment
 import com.ru.malevich.unscramblegame.core.presentation.GameUiState
 import com.ru.malevich.unscramblegame.databinding.FragmentGameBinding
 import com.ru.malevich.unscramblegame.gameover.presentation.NavigateToGameOver
 
-class GameFragment : Fragment() {
-    private var _binding: FragmentGameBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var viewModel: GameViewModel
+class GameFragment : AbstractFragment.Async<GameUiState, GameViewModel, FragmentGameBinding>() {
     private val textWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
 
@@ -25,7 +22,7 @@ class GameFragment : Fragment() {
             viewModel.handleUserInput(text = binding.inputText.text.toString())
         }
     }
-    private val update: (GameUiState) -> Unit = { uiState ->
+    override val update: (GameUiState) -> Unit = { uiState ->
         uiState.update(
             binding.scrambledWordTextView,
             binding.inputText,
@@ -36,15 +33,8 @@ class GameFragment : Fragment() {
         uiState.navigate(requireActivity() as NavigateToGameOver)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentGameBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
+    override fun inflate(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentGameBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,17 +60,10 @@ class GameFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.inputText.addTextChangedListener(textWatcher)
-        viewModel.startUpdates(observer = update)
     }
 
     override fun onPause() {
         super.onPause()
         binding.inputText.removeTextChangedListener(textWatcher)
-        viewModel.stopUpdates()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

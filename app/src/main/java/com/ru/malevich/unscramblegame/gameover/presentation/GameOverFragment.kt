@@ -4,25 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.ru.malevich.unscramblegame.core.di.ProvideViewModel
+import com.ru.malevich.unscramblegame.core.presentation.AbstractFragment
 import com.ru.malevich.unscramblegame.databinding.FragmentGameOverBinding
 import com.ru.malevich.unscramblegame.load.presentation.NavigateToLoad
 import com.ru.malevich.unscramblegame.views.statstextview.StatsUiState
 
-class GameOverFragment : Fragment() {
-    private var _binding: FragmentGameOverBinding? = null
-    private val binding get() = _binding!!
+class GameOverFragment : AbstractFragment.BindingUi<FragmentGameOverBinding>() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentGameOverBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
+    override fun inflate(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentGameOverBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,11 +25,5 @@ class GameOverFragment : Fragment() {
         binding.newGameButton.setOnClickListener {
             (requireActivity() as NavigateToLoad).navigateToLoad()
         }
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
